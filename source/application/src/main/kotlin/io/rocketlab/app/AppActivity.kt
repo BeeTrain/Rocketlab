@@ -1,4 +1,4 @@
-package io.rocketlab
+package io.rocketlab.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,9 +10,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.rocketlab.ui.theme.RocketlabTheme
+import io.rocketlab.app.ui.theme.RocketlabTheme
 
-class MainActivity : ComponentActivity() {
+class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

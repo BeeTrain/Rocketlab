@@ -1,4 +1,4 @@
-package io.rocketlab.ui.theme
+package io.rocketlab.app.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -16,15 +16,15 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = Brand5,
+    secondary = Brand2,
+    tertiary = Brand4
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = Brand1,
+    secondary = Brand2,
+    tertiary = Brand3
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
