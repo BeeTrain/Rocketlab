@@ -1,0 +1,21 @@
+# android studio
+.idea
+*.iml
+
+# gradle
+.gradle
+build/
+
+# local
+local.properties
+google-services.json
+
+# generated files
+bin/
+gen/
+captures/
+debug/
+release/
+
+# OSX files
+.DS_Store
