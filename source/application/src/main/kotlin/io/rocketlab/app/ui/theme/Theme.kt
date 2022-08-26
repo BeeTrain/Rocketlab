@@ -13,7 +13,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
     primary = Brand5,
@@ -40,7 +40,6 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun RocketlabTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -52,11 +51,14 @@ fun RocketlabTheme(
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
+
+    // Dynamic color
     val view = LocalView.current
-    if (!view.isInEditMode) {
+    val window = (view.context as Activity).window
+    if (view.isInEditMode.not()) {
         SideEffect {
             (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
 

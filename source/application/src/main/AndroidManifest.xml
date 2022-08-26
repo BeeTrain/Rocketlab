@@ -10,6 +10,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:name=".RocketlabApp"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
@@ -17,7 +18,8 @@
 
         <activity
             android:exported="true"
-            android:name=".AppActivity">
+            android:name=".presentation.view.AppActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
