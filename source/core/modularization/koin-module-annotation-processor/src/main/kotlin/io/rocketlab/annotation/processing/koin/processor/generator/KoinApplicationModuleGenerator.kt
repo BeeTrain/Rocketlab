@@ -26,11 +26,6 @@ internal class KoinApplicationModuleGenerator(
         val modulesProviders = getModulesProviders()
         val koinProviders = applicationModules + modulesProviders
 
-        println("koinApplicationElement: $koinApplicationElement")
-        println("applicationModules: $applicationModules")
-        println("modulesProviders: $modulesProviders")
-        println("koinProviders: $koinProviders")
-
         if (koinApplicationElement.isNotEmpty() && koinProviders.isNotEmpty()) {
             generateKoinModulesFile(koinProviders)
         }
