@@ -9,6 +9,9 @@ const val kotlinVersion = "1.7.10"
 object Plugins {
 
     const val applicationModule = "application-module-plugin"
+    const val featureModule = "feature-module-plugin"
+    const val apiModule = "api-module-plugin"
+    const val androidModule = "android-module-plugin"
     const val kotlinModule = "kotlin-module-plugin"
 
     const val androidApplication = "com.android.application"

@@ -33,6 +33,18 @@ gradlePlugin {
         id = "application-module-plugin"
         implementationClass = "plugin.ApplicationModulePlugin"
     }
+    plugins.register("api-module-plugin") {
+        id = "api-module-plugin"
+        implementationClass = "plugin.ApiModulePlugin"
+    }
+    plugins.register("feature-module-plugin") {
+        id = "feature-module-plugin"
+        implementationClass = "plugin.FeatureModulePlugin"
+    }
+    plugins.register("android-module-plugin") {
+        id = "android-module-plugin"
+        implementationClass = "plugin.AndroidModulePlugin"
+    }
     plugins.register("kotlin-module-plugin") {
         id = "kotlin-module-plugin"
         implementationClass = "plugin.KotlinModulePlugin"
