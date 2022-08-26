@@ -10,7 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import io.rocketlab.app.ui.theme.RocketlabTheme
+import io.rocketlab.ui.theme.RocketlabTheme
 
 class AppActivity : ComponentActivity() {
 

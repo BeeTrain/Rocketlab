@@ -4,6 +4,7 @@ import AndroidDependencies.core
 import AndroidDependencies.lifecycle
 import ComposeDependencies.compose
 import Plugins
+import extension.setupCompose
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 
@@ -13,6 +14,7 @@ class FeatureModulePlugin : AndroidModulePlugin() {
         super.apply(project)
         project.run {
             applyPlugins()
+            setupCompose()
             applyDependencies()
         }
     }

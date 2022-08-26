@@ -1,4 +1,4 @@
-package io.rocketlab.app.ui.theme
+package io.rocketlab.ui.theme
 
 import android.app.Activity
 import android.os.Build
