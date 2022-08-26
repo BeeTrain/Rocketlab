@@ -3,6 +3,8 @@ package plugin
 import AndroidDependencies.core
 import AndroidDependencies.lifecycle
 import ComposeDependencies.compose
+import CoreModules.uiModule
+import DIDependencies.koin
 import Plugins
 import extension.setupCompose
 import org.gradle.api.Project
@@ -27,7 +29,10 @@ class FeatureModulePlugin : AndroidModulePlugin() {
 
     private fun Project.applyDependencies() {
         dependencies.apply {
+            uiModule()
+
             core()
+            koin()
             lifecycle()
             compose()
         }

@@ -6,6 +6,7 @@ import AppConfig
 import BuildTypes
 import ComposeDependencies
 import ComposeDependencies.compose
+import DIDependencies.koin
 import Plugins
 import internal.applicationExtension
 import internal.configureProjectModules
@@ -78,6 +79,9 @@ class ApplicationModulePlugin : Plugin<Project> {
                     excludes += setOf(
                         "/META-INF/{AL2.0,LGPL2.1}"
                     )
+                    merges += setOf(
+                        "META-INF/gradle/incremental.annotation.processors"
+                    )
                 }
             }
         }
@@ -88,8 +92,9 @@ class ApplicationModulePlugin : Plugin<Project> {
             configureProjectModules()
 
             core()
-            lifecycle()
+            koin()
             compose()
+            lifecycle()
         }
     }
 }

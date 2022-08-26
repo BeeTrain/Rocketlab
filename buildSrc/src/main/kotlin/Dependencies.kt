@@ -1,8 +1,12 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
+import CoreModules.koinModules
+import internal.compileOnly
 import internal.debugImplementation
 import internal.implementation
+import internal.kapt
 import org.gradle.api.artifacts.dsl.DependencyHandler
+import org.gradle.kotlin.dsl.project
 
 const val kotlinVersion = "1.7.10"
 
@@ -94,5 +98,58 @@ object AndroidDependencies {
 
     fun DependencyHandler.lifecycle() = apply {
         implementation(lifecycleRuntimeKtx)
+    }
+}
+
+
+object DIDependencies {
+    object Versions {
+        const val koin = "3.2.0"
+    }
+
+    const val core = "io.insert-koin:koin-core:${Versions.koin}"
+    const val android = "io.insert-koin:koin-android:${Versions.koin}"
+    const val compose = "io.insert-koin:koin-androidx-compose:${Versions.koin}"
+
+    fun DependencyHandler.koin() = apply {
+        implementation(core)
+        implementation(android)
+        implementation(compose)
+        koinModules()
+    }
+}
+
+object AnnotationProcessingDependencies {
+
+    object Versions {
+        const val autoService = "1.0.1"
+        const val incap = "0.3"
+    }
+
+    val autoService = "com.google.auto.service:auto-service:${Versions.autoService}"
+    val fixGuavaPackage = "com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava"
+
+    val incap = "net.ltgt.gradle.incap:incap:${Versions.incap}"
+    val incapProcessor = "net.ltgt.gradle.incap:incap-processor:${Versions.incap}"
+
+    fun DependencyHandler.annotationProcessing() = apply {
+        kapt(autoService)
+        implementation(autoService)
+        kapt(fixGuavaPackage)
+        implementation(fixGuavaPackage)
+        kapt(incapProcessor)
+        compileOnly(incap)
+    }
+}
+
+internal object CoreModules {
+
+    fun DependencyHandler.uiModule() = apply {
+        implementation(project(":ui"))
+    }
+
+    fun DependencyHandler.koinModules() = apply {
+        implementation(project(":koin-module-annotation"))
+        kapt(project(":koin-module-annotation-processor"))
     }
 }
