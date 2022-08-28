@@ -1,3 +1,4 @@
+import AndroidDependencies.navigation
 import ComposeDependencies.compose
 import extension.setupCompose
 
@@ -9,4 +10,5 @@ setupCompose()
 
 dependencies {
     compose()
+    navigation()
 }

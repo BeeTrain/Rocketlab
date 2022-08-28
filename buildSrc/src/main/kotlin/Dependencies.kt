@@ -61,6 +61,7 @@ object ComposeDependencies {
     }
 
     const val ui = "androidx.compose.ui:ui:${Versions.functionality}"
+    const val material = "androidx.compose.material:material:${Versions.functionality}"
     const val material3 = "androidx.compose.material3:material3:${Versions.material3}"
     const val uiToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.functionality}"
 
@@ -69,6 +70,7 @@ object ComposeDependencies {
 
     fun DependencyHandler.compose() = apply {
         implementation(ui)
+        implementation(material)
         implementation(material3)
         implementation(uiToolingPreview)
         implementation(AndroidDependencies.activityCompose)
@@ -85,12 +87,17 @@ object AndroidDependencies {
         const val core = "1.8.0"
         const val lifecycle = "2.4.1"
         const val activityCompose = "1.5.1"
+        const val navigation = "2.5.1"
+        const val accompanist = "0.26.2-beta"
     }
 
     const val coreKtx = "androidx.core:core-ktx:${Versions.core}"
 
     const val lifecycleRuntimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}"
     const val activityCompose = "androidx.activity:activity-compose:${Versions.activityCompose}"
+
+    const val navigation = "androidx.navigation:navigation-compose:${Versions.navigation}"
+    const val accompanistNavigation = "com.google.accompanist:accompanist-navigation-material:${Versions.accompanist}"
 
     fun DependencyHandler.core() = apply {
         implementation(coreKtx)
@@ -99,8 +106,12 @@ object AndroidDependencies {
     fun DependencyHandler.lifecycle() = apply {
         implementation(lifecycleRuntimeKtx)
     }
-}
 
+    fun DependencyHandler.navigation() = apply {
+        implementation(navigation)
+        implementation(accompanistNavigation)
+    }
+}
 
 object DIDependencies {
     object Versions {
