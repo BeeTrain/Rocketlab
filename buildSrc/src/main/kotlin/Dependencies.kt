@@ -26,6 +26,10 @@ object Plugins {
     const val kotlinJVM = "org.jetbrains.kotlin.jvm"
     const val kotlinKapt = "kotlin-kapt"
     const val javaLibrary = "java-library"
+
+    const val googleServices = "com.google.gms.google-services"
+    const val firebaseAppDistribution = "com.google.firebase.appdistribution"
+    const val firebaseCrashlytics = "com.google.firebase.crashlytics"
 }
 
 object KotlinDependencies {
@@ -114,7 +118,9 @@ object AndroidDependencies {
 }
 
 object DIDependencies {
+
     object Versions {
+
         const val koin = "3.2.0"
     }
 
@@ -130,9 +136,34 @@ object DIDependencies {
     }
 }
 
+object FirebaseDependencies {
+
+    object Versions {
+
+        const val firebase = "30.3.1"
+        const val mlVision = "24.0.3"
+        const val mlVisionBarcode = "16.0.1"
+    }
+
+    const val bom = "com.google.firebase:firebase-bom:${Versions.firebase}"
+    const val analyticsKtx = "com.google.firebase:firebase-analytics-ktx"
+    const val crashlyticsKtx = "com.google.firebase:firebase-crashlytics-ktx"
+
+    fun DependencyHandler.firebase() = apply {
+        implementation(platform(bom))
+        implementation(analyticsKtx)
+        implementation(crashlyticsKtx)
+    }
+
+    fun DependencyHandler.crashlytics() = apply {
+        implementation(crashlyticsKtx)
+    }
+}
+
 object AnnotationProcessingDependencies {
 
     object Versions {
+
         const val autoService = "1.0.1"
         const val incap = "0.3"
     }

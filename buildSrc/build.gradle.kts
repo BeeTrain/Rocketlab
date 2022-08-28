@@ -3,6 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val javaVersion = JavaVersion.VERSION_11
 val kotlinVersion = "1.7.10"
 val buildGradlePluginVersion = "7.2.2"
+val googleServicesVersion = "4.3.10"
+val appDistributionVersion = "3.0.2"
+val crashlyticsPlugin = "2.9.1"
 
 plugins {
     `kotlin-dsl`
@@ -26,6 +29,10 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
     implementation("com.android.tools.build:gradle:$buildGradlePluginVersion")
+
+    implementation("com.google.gms:google-services:$googleServicesVersion")
+    implementation("com.google.firebase:firebase-appdistribution-gradle:$appDistributionVersion")
+    implementation("com.google.firebase:firebase-crashlytics-gradle:$crashlyticsPlugin")
 }
 
 gradlePlugin {

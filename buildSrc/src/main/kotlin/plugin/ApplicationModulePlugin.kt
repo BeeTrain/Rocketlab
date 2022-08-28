@@ -7,6 +7,7 @@ import BuildTypes
 import ComposeDependencies
 import ComposeDependencies.compose
 import DIDependencies.koin
+import FirebaseDependencies.firebase
 import Plugins
 import internal.applicationExtension
 import internal.applicationProguardFiles
@@ -33,6 +34,7 @@ class ApplicationModulePlugin : Plugin<Project> {
             apply(plugin = Plugins.androidApplication)
             apply(plugin = Plugins.kotlinModule)
             apply(plugin = Plugins.kotlinKapt)
+            apply(plugin = Plugins.firebaseCrashlytics)
         }
     }
 
@@ -108,6 +110,7 @@ class ApplicationModulePlugin : Plugin<Project> {
             core()
             koin()
             compose()
+            firebase()
             lifecycle()
         }
     }
