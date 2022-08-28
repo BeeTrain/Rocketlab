@@ -9,12 +9,14 @@ import ComposeDependencies.compose
 import DIDependencies.koin
 import Plugins
 import internal.applicationExtension
+import internal.applicationProguardFiles
 import internal.configureProjectModules
 import internal.versionCode
 import internal.versionName
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
+import java.io.File
 
 class ApplicationModulePlugin : Plugin<Project> {
 
@@ -44,6 +46,7 @@ class ApplicationModulePlugin : Plugin<Project> {
                 targetSdk = AppConfig.targetSdkVersion
                 versionCode = versionCode()
                 versionName = versionName()
+                proguardFiles += applicationProguardFiles
             }
 
             compileOptions {
@@ -54,6 +57,17 @@ class ApplicationModulePlugin : Plugin<Project> {
             signingConfigs {
                 BuildTypes.values().forEach { buildType ->
                     maybeCreate(buildType.title)
+                    named(buildType.title) {
+                        storeFile = File("${rootDir.path}/${buildType.signing.storeFilePath}")
+                        storePassword = buildType.signing.storePassword
+                        keyAlias = buildType.signing.keyAlias
+                        keyPassword = buildType.signing.keyPassword
+
+                        enableV1Signing = true
+                        enableV2Signing = true
+                        enableV3Signing = true
+                        enableV4Signing = true
+                    }
                 }
             }
 
