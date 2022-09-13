@@ -12,11 +12,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import io.rocketlab.ui.navigation.Destination
 
 @Composable
 fun HomeScreen(
-    navigateTo: (String) -> Unit
+    onNotesClicked: () -> Unit
 ) {
     Scaffold(
         topBar = { Spacer(modifier = Modifier.statusBarsPadding()) },
@@ -37,12 +36,9 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 modifier = Modifier.navigationBarsPadding(),
-                onClick = {
-                    navigateTo(Destination.Notes.route)
-                },
-            ) {
-
-            }
+                onClick = { onNotesClicked.invoke() },
+                content = {}
+            )
         }
     )
 }

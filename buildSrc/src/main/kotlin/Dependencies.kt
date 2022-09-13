@@ -67,6 +67,7 @@ object ComposeDependencies {
     const val ui = "androidx.compose.ui:ui:${Versions.functionality}"
     const val material = "androidx.compose.material:material:${Versions.functionality}"
     const val material3 = "androidx.compose.material3:material3:${Versions.material3}"
+    const val iconsExtended = "androidx.compose.material:material-icons-extended:${Versions.functionality}"
     const val uiToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.functionality}"
 
     const val uiTooling = "androidx.compose.ui:ui-tooling:${Versions.functionality}"
@@ -76,6 +77,7 @@ object ComposeDependencies {
         implementation(ui)
         implementation(material)
         implementation(material3)
+        implementation(iconsExtended)
         implementation(uiToolingPreview)
         implementation(AndroidDependencies.activityCompose)
 
@@ -93,6 +95,7 @@ object AndroidDependencies {
         const val activityCompose = "1.5.1"
         const val navigation = "2.5.1"
         const val accompanist = "0.26.2-beta"
+        const val playServicesAuth = "20.2.0"
     }
 
     const val coreKtx = "androidx.core:core-ktx:${Versions.core}"
@@ -102,6 +105,8 @@ object AndroidDependencies {
 
     const val navigation = "androidx.navigation:navigation-compose:${Versions.navigation}"
     const val accompanistNavigation = "com.google.accompanist:accompanist-navigation-material:${Versions.accompanist}"
+
+    const val playServicesAuth = "com.google.android.gms:play-services-auth:${Versions.playServicesAuth}"
 
     fun DependencyHandler.core() = apply {
         implementation(coreKtx)
@@ -141,22 +146,35 @@ object FirebaseDependencies {
     object Versions {
 
         const val firebase = "30.3.1"
-        const val mlVision = "24.0.3"
-        const val mlVisionBarcode = "16.0.1"
+        const val firebaseUi = "8.0.1"
     }
 
     const val bom = "com.google.firebase:firebase-bom:${Versions.firebase}"
     const val analyticsKtx = "com.google.firebase:firebase-analytics-ktx"
     const val crashlyticsKtx = "com.google.firebase:firebase-crashlytics-ktx"
+    const val auth = "com.google.firebase:firebase-auth"
+
+    const val uiAuth = "com.firebaseui:firebase-ui-auth:${Versions.firebaseUi}"
 
     fun DependencyHandler.firebase() = apply {
         implementation(platform(bom))
+        analytics()
+        crashlytics()
+        auth()
+    }
+
+    fun DependencyHandler.analytics() = apply {
         implementation(analyticsKtx)
-        implementation(crashlyticsKtx)
     }
 
     fun DependencyHandler.crashlytics() = apply {
         implementation(crashlyticsKtx)
+    }
+
+    fun DependencyHandler.auth() = apply {
+        implementation(auth)
+        implementation(uiAuth)
+        implementation(AndroidDependencies.playServicesAuth)
     }
 }
 
