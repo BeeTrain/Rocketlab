@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import io.rocketlab.arch.extension.accept
 import io.rocketlab.auth.signin.presentation.model.SignInState
 import io.rocketlab.auth.signin.presentation.viewmodel.SignInViewModel
 import io.rocketlab.ui.progress.CircularProgress
@@ -64,11 +65,11 @@ fun SignInScreen(
                 is SignInState.Content -> {
                     renderContent(
                         uiState = uiState as SignInState.Content,
-                        onEmailValueChange = { viewModel.updateEmail(it) },
-                        onPasswordValueChange = { viewModel.updatePassword(it) },
+                        onEmailValueChange = { viewModel.updateEmailAction.accept(it) },
+                        onPasswordValueChange = { viewModel.updatePasswordAction.accept(it) },
                         onRegisterClicked = onRegisterClicked,
-                        onLoginClicked = { viewModel.onLoginClicked(onLogged) },
-                        onPasswordVisibilityClicked = { viewModel.onPasswordVisibilityClicked() }
+                        onLoginClicked = { viewModel.loginClickedAction.accept(onLogged) },
+                        onPasswordVisibilityClicked = { viewModel.updatePasswordVisibilityAction.accept() }
                     )
                     (uiState as? SignInState.Content)?.error?.let { error ->
                         coroutineScope.renderError(scaffoldState, error)

@@ -1,6 +1,7 @@
 package io.rocketlab.auth.signin.presentation.viewmodel
 
-import androidx.lifecycle.ViewModel
+import io.rocketlab.arch.extension.action
+import io.rocketlab.arch.presentation.viewmodel.BaseViewModel
 import io.rocketlab.auth.signin.presentation.model.SignInState
 import io.rocketlab.service.auth.AuthService
 import io.rocketlab.service.auth.exception.SignInTimeoutException
@@ -11,11 +12,16 @@ import kotlinx.coroutines.flow.update
 
 class SignInViewModel(
     private val authService: AuthService
-) : ViewModel() {
+) : BaseViewModel() {
 
     val uiState = MutableStateFlow<SignInState>(SignInState.Content())
 
-    fun updateEmail(newValue: String) {
+    val updateEmailAction = action<String> { updateEmail(it) }
+    val updatePasswordAction = action(::updatePassword)
+    val updatePasswordVisibilityAction = action<Unit> { onPasswordVisibilityChanged() }
+    val loginClickedAction = action(::onLoginClicked)
+
+    private fun updateEmail(newValue: String) {
         (uiState.value as? SignInState.Content)?.let { content ->
             uiState.update {
                 content.copy(
@@ -28,7 +34,7 @@ class SignInViewModel(
         }
     }
 
-    fun updatePassword(newValue: String) {
+    private fun updatePassword(newValue: String) {
         (uiState.value as? SignInState.Content)?.let { content ->
             uiState.update {
                 content.copy(
@@ -41,7 +47,7 @@ class SignInViewModel(
         }
     }
 
-    fun onPasswordVisibilityClicked() {
+    private fun onPasswordVisibilityChanged() {
         (uiState.value as? SignInState.Content)?.let { content ->
             val isPasswordVisible = content.password.isVisible
             uiState.update {
@@ -54,7 +60,7 @@ class SignInViewModel(
         }
     }
 
-    fun onLoginClicked(onLogged: () -> Unit) {
+    private fun onLoginClicked(onLogged: () -> Unit) {
         (uiState.value as? SignInState.Content)?.let { content ->
             content.validate(
                 { credentials -> signIn(credentials, onLogged) },
