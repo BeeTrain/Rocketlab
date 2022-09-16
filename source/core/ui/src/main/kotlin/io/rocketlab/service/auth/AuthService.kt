@@ -6,14 +6,14 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import io.rocketlab.service.auth.exception.SignInTimeoutException
+import io.rocketlab.service.auth.exception.AuthServerTimeoutException
 import io.rocketlab.service.auth.model.Credentials
 import io.rocketlab.utils.extension.catchError
 import java.util.Timer
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
 
-private const val DEFAULT_SIGN_IN_TIMEOUT = 30L
+private const val DEFAULT_TIMEOUT = 30L
 
 class AuthService(
     private val firebaseAuth: FirebaseAuth,
@@ -28,6 +28,17 @@ class AuthService(
 
     fun getGoogleSignInIntent(): Intent {
         return googleSignInClient.signInIntent
+    }
+
+    fun registerUser(
+        credentials: Credentials,
+        onSuccess: (Task<AuthResult>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        catchError(
+            createUserWithEmailAndPassword(credentials, onSuccess, onFailure),
+            onFailure
+        )
     }
 
     fun signInWithCredentials(
@@ -53,9 +64,28 @@ class AuthService(
                 .addOnCompleteListener { if (isActive) onSuccess.invoke(it) }
                 .addOnFailureListener { if (isActive) onFailure.invoke(it) }
 
-            Timer().schedule(TimeUnit.SECONDS.toMillis(DEFAULT_SIGN_IN_TIMEOUT)) {
+            Timer().schedule(TimeUnit.SECONDS.toMillis(DEFAULT_TIMEOUT)) {
                 isActive = false
-                onFailure.invoke(SignInTimeoutException())
+                onFailure.invoke(AuthServerTimeoutException())
+            }
+        }
+    }
+
+    private fun createUserWithEmailAndPassword(
+        credentials: Credentials,
+        onSuccess: (Task<AuthResult>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ): () -> Unit {
+        return {
+            var isActive = true
+
+            firebaseAuth.createUserWithEmailAndPassword(credentials.email, credentials.password)
+                .addOnCompleteListener { if (isActive) onSuccess.invoke(it) }
+                .addOnFailureListener { if (isActive) onFailure.invoke(it) }
+
+            Timer().schedule(TimeUnit.SECONDS.toMillis(DEFAULT_TIMEOUT)) {
+                isActive = false
+                onFailure.invoke(AuthServerTimeoutException())
             }
         }
     }

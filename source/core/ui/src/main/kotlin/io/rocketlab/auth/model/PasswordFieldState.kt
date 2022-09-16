@@ -1,4 +1,4 @@
-package io.rocketlab.auth.signin.presentation.model
+package io.rocketlab.auth.model
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility

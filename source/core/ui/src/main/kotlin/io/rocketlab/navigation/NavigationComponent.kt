@@ -46,11 +46,23 @@ fun NavigationComponent() {
             composable(Destination.SignIn) {
                 SignInScreen(
                     { navController.navigate(Destination.SignUp) },
-                    { navController.navigate(Destination.Home) }
+                    {
+                        navController.navigate(Destination.Home) {
+                            popUpTo(Destination.Splash.route) {
+                                inclusive = true
+                            }
+                        }
+                    }
                 )
             }
             composable(Destination.SignUp) {
-                SignUpScreen()
+                SignUpScreen {
+                    navController.navigate(Destination.Home) {
+                        popUpTo(Destination.Splash.route) {
+                            inclusive = true
+                        }
+                    }
+                }
             }
             composable(Destination.Home) {
                 HomeScreen {

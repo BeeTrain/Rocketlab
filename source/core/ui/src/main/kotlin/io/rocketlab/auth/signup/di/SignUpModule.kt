@@ -8,5 +8,5 @@ import org.koin.dsl.module
 @KoinModule
 val signUpModule = module {
 
-    viewModel { SignUpViewModel() }
+    viewModel { SignUpViewModel(get()) }
 }

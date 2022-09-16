@@ -1,4 +1,4 @@
-package io.rocketlab.auth.signin.presentation.model
+package io.rocketlab.auth.model
 
 data class EMailFieldState(
     val label: String = "E-Mail",

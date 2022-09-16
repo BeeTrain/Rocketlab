@@ -21,6 +21,7 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -29,8 +30,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import io.rocketlab.arch.extension.accept
-import io.rocketlab.auth.signin.presentation.model.SignInState
+import io.rocketlab.auth.signin.presentation.model.SignInErrorState
+import io.rocketlab.auth.signin.presentation.model.SignInScreenState
+import io.rocketlab.auth.signin.presentation.model.asContent
 import io.rocketlab.auth.signin.presentation.viewmodel.SignInViewModel
+import io.rocketlab.ui.extension.afterFocusChanged
 import io.rocketlab.ui.progress.CircularProgress
 import io.rocketlab.ui.text.OutlinedValidatedTextField
 import kotlinx.coroutines.CoroutineScope
@@ -45,6 +49,7 @@ fun SignInScreen(
     val viewModel by inject<SignInViewModel>()
     val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState.collectAsState()
+    val errorState by viewModel.errorState.collectAsState()
     val interactionSource = remember { MutableInteractionSource() }
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -62,21 +67,17 @@ fun SignInScreen(
                 )
         ) {
             when (uiState) {
-                is SignInState.Content -> {
-                    renderContent(
-                        uiState = uiState as SignInState.Content,
-                        onEmailValueChange = { viewModel.updateEmailAction.accept(it) },
-                        onPasswordValueChange = { viewModel.updatePasswordAction.accept(it) },
-                        onRegisterClicked = onRegisterClicked,
-                        onLoginClicked = { viewModel.loginClickedAction.accept(onLogged) },
-                        onPasswordVisibilityClicked = { viewModel.updatePasswordVisibilityAction.accept() }
-                    )
-                    (uiState as? SignInState.Content)?.error?.let { error ->
-                        coroutineScope.renderError(scaffoldState, error)
-                    }
-                }
-                is SignInState.Loading -> renderLoading()
-                is SignInState.Error -> coroutineScope.renderError(scaffoldState, uiState as SignInState.Error)
+                is SignInScreenState.Content -> renderContent(
+                    uiState = uiState.asContent(),
+                    viewModel = viewModel,
+                    onRegisterClicked = onRegisterClicked,
+                    onLogged = onLogged
+                )
+                is SignInScreenState.Loading -> renderLoading()
+            }
+            if (errorState != SignInErrorState.None) {
+                renderError(coroutineScope, scaffoldState, errorState)
+                viewModel.onErrorShowedAction.accept()
             }
         }
     }
@@ -93,13 +94,14 @@ private fun BoxScope.renderLoading() {
 
 @Composable
 private fun BoxScope.renderContent(
-    uiState: SignInState.Content,
-    onEmailValueChange: (String) -> Unit,
-    onPasswordValueChange: (String) -> Unit,
-    onRegisterClicked: () -> Unit,
-    onLoginClicked: () -> Unit,
-    onPasswordVisibilityClicked: () -> Unit,
+    uiState: SignInScreenState.Content,
+    viewModel: SignInViewModel,
+    onRegisterClicked: (() -> Unit),
+    onLogged: (() -> Unit)
 ) {
+    val isEmailFocused = remember { mutableStateOf(false) }
+    val isPasswordFocused = remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -111,24 +113,24 @@ private fun BoxScope.renderContent(
             value = uiState.eMail.value,
             error = uiState.eMail.error,
             isError = uiState.eMail.error.isNotEmpty(),
-            onValueChange = { onEmailValueChange.invoke(it) },
+            onValueChange = { viewModel.updateEmailAction.accept(it) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             singleLine = true,
             maxLines = 1,
             modifier = Modifier
-                .padding(8.dp)
                 .fillMaxWidth()
+                .afterFocusChanged(isEmailFocused) { viewModel.validateEmailAction.accept() }
         )
         OutlinedValidatedTextField(
             label = { Text(uiState.password.label) },
             value = uiState.password.value,
             error = uiState.password.error,
             isError = uiState.password.error.isNotEmpty(),
-            onValueChange = { onPasswordValueChange.invoke(it) },
+            onValueChange = { viewModel.updatePasswordAction.accept(it) },
             visualTransformation = uiState.password.passwordTransformation,
             trailingIcon = {
                 IconButton(
-                    onClick = { onPasswordVisibilityClicked.invoke() },
+                    onClick = { viewModel.updatePasswordVisibilityAction.accept() },
                     content = {
                         Icon(
                             imageVector = uiState.password.visibilityIcon,
@@ -140,21 +142,21 @@ private fun BoxScope.renderContent(
             singleLine = true,
             maxLines = 1,
             modifier = Modifier
-                .padding(8.dp)
                 .fillMaxWidth()
+                .afterFocusChanged(isPasswordFocused) { viewModel.validatePasswordAction.accept() }
         )
         Row(
             modifier = Modifier.align(Alignment.End)
         ) {
             Button(
                 modifier = Modifier.padding(8.dp),
-                onClick = onRegisterClicked,
+                onClick = { onRegisterClicked.invoke() },
                 content = { Text("Register") }
             )
             Button(
                 modifier = Modifier.padding(8.dp),
-                enabled = uiState.isLoginButtonEnabled,
-                onClick = onLoginClicked,
+                enabled = uiState.isFieldsValid,
+                onClick = { viewModel.loginClickedAction.accept(onLogged) },
                 content = { Text("Login") }
             )
         }
@@ -162,11 +164,12 @@ private fun BoxScope.renderContent(
 }
 
 @Composable
-private fun CoroutineScope.renderError(
+private fun renderError(
+    coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState,
-    error: SignInState.Error
+    error: SignInErrorState
 ) {
-    launch {
+    coroutineScope.launch {
         scaffoldState.snackbarHostState.showSnackbar(
             message = error.message
         )
