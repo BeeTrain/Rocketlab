@@ -1,11 +1,14 @@
 package io.rocketlab.service.auth
 
 import android.content.Intent
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import io.rocketlab.service.auth.exception.AuthServerTimeoutException
 import io.rocketlab.service.auth.model.Credentials
 import io.rocketlab.utils.extension.catchError
@@ -21,7 +24,7 @@ class AuthService(
 ) {
 
     private val firebaseUser: FirebaseUser?
-        get() = null
+        get() = firebaseAuth.currentUser
 
     val isLogged: Boolean
         get() = firebaseUser != null
@@ -37,6 +40,19 @@ class AuthService(
     ) {
         catchError(
             createUserWithEmailAndPassword(credentials, onSuccess, onFailure),
+            onFailure
+        )
+    }
+
+    fun signInWithGoogleSign(
+        account: GoogleSignInAccount,
+        onSuccess: (Task<AuthResult>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+
+        catchError(
+            signInWithGoogleCredentials(credential, onSuccess, onFailure),
             onFailure
         )
     }
@@ -80,6 +96,25 @@ class AuthService(
             var isActive = true
 
             firebaseAuth.createUserWithEmailAndPassword(credentials.email, credentials.password)
+                .addOnCompleteListener { if (isActive) onSuccess.invoke(it) }
+                .addOnFailureListener { if (isActive) onFailure.invoke(it) }
+
+            Timer().schedule(TimeUnit.SECONDS.toMillis(DEFAULT_TIMEOUT)) {
+                isActive = false
+                onFailure.invoke(AuthServerTimeoutException())
+            }
+        }
+    }
+
+    private fun signInWithGoogleCredentials(
+        credential: AuthCredential,
+        onSuccess: (Task<AuthResult>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ): () -> Unit {
+        return {
+            var isActive = true
+
+            firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener { if (isActive) onSuccess.invoke(it) }
                 .addOnFailureListener { if (isActive) onFailure.invoke(it) }
 

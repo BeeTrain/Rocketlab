@@ -1,5 +1,8 @@
 package io.rocketlab.screen.auth.signin.presentation.view
 
+import android.app.Activity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -19,6 +22,7 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 import io.rocketlab.arch.extension.accept
+import io.rocketlab.arch.extension.collectAsCommand
 import io.rocketlab.screen.auth.signin.presentation.model.SignInErrorState
 import io.rocketlab.screen.auth.signin.presentation.model.SignInScreenState
 import io.rocketlab.screen.auth.signin.presentation.model.asContent
@@ -48,11 +55,28 @@ fun SignInScreen(
 ) {
     val viewModel by inject<SignInViewModel>()
     val focusManager = LocalFocusManager.current
-    val uiState by viewModel.uiState.collectAsState()
-    val errorState by viewModel.errorState.collectAsState()
     val interactionSource = remember { MutableInteractionSource() }
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
+
+    val uiState by viewModel.uiState.collectAsState()
+    val errorState by viewModel.errorState.collectAsState()
+
+    val openSignUpCommand by viewModel.openSignUpCommand.collectAsCommand()
+    val googleSignCommand by viewModel.launchGoogleSignCommand.collectAsCommand()
+    val onLoggedCommand by viewModel.onLoggedCommand.collectAsCommand()
+
+    val startForResult = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            if (result.data != null) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                val account = task.getResult(ApiException::class.java)
+                account?.let { viewModel.onGoogleAccountReceivedAction.accept(it) }
+            }
+        }
+    }
 
     Scaffold(
         scaffoldState = scaffoldState
@@ -70,8 +94,7 @@ fun SignInScreen(
                 is SignInScreenState.Content -> renderContent(
                     uiState = uiState.asContent(),
                     viewModel = viewModel,
-                    onRegisterClicked = onRegisterClicked,
-                    onLogged = onLogged
+                    onRegisterClicked = onRegisterClicked
                 )
                 is SignInScreenState.Loading -> renderLoading()
             }
@@ -80,6 +103,15 @@ fun SignInScreen(
                 viewModel.onErrorShowedAction.accept()
             }
         }
+    }
+    LaunchedEffect(openSignUpCommand) {
+        openSignUpCommand?.let { onRegisterClicked.invoke() }
+    }
+    LaunchedEffect(googleSignCommand) {
+        googleSignCommand?.let { startForResult.launch(it) }
+    }
+    LaunchedEffect(onLoggedCommand) {
+        onLoggedCommand?.let { onLogged.invoke() }
     }
 }
 
@@ -96,8 +128,7 @@ private fun BoxScope.renderLoading() {
 private fun BoxScope.renderContent(
     uiState: SignInScreenState.Content,
     viewModel: SignInViewModel,
-    onRegisterClicked: (() -> Unit),
-    onLogged: (() -> Unit)
+    onRegisterClicked: (() -> Unit)
 ) {
     val isEmailFocused = remember { mutableStateOf(false) }
     val isPasswordFocused = remember { mutableStateOf(false) }
@@ -150,14 +181,23 @@ private fun BoxScope.renderContent(
         ) {
             Button(
                 modifier = Modifier.padding(8.dp),
-                onClick = { onRegisterClicked.invoke() },
+                onClick = { viewModel.registerClickedAction.accept() },
                 content = { Text("Register") }
             )
             Button(
                 modifier = Modifier.padding(8.dp),
                 enabled = uiState.isFieldsValid,
-                onClick = { viewModel.loginClickedAction.accept(onLogged) },
+                onClick = { viewModel.loginClickedAction.accept() },
                 content = { Text("Login") }
+            )
+        }
+        Row(
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Button(
+                modifier = Modifier.padding(8.dp),
+                onClick = { viewModel.googleSignClickedAction.accept() },
+                content = { Text("via Google") }
             )
         }
     }
