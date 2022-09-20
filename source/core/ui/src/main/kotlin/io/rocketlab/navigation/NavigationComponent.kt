@@ -5,8 +5,8 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
-import io.rocketlab.screen.auth.signin.presentation.view.SignInScreen
-import io.rocketlab.screen.auth.signup.presentation.view.SignUpScreen
+import io.rocketlab.screen.auth.presentation.signin.presentation.view.SignInScreen
+import io.rocketlab.screen.auth.presentation.signup.presentation.view.SignUpScreen
 import io.rocketlab.screen.home.presentation.HomeScreen
 import io.rocketlab.navigation.extension.NavHost
 import io.rocketlab.navigation.extension.composable
@@ -48,7 +48,7 @@ fun NavigationComponent() {
                     { navController.navigate(Destination.SignUp) },
                     {
                         navController.navigate(Destination.Home) {
-                            popUpTo(Destination.Splash.route) {
+                            popUpTo(Destination.SignIn.route) {
                                 inclusive = true
                             }
                         }

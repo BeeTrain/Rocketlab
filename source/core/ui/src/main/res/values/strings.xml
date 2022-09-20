@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="e_mail_field_title">E-mail</string>
+    <string name="e_mail_field_empty_error_text">Enter e-mail</string>
+    <string name="e_mail_field_invalid_error_text">Enter correct e-mail</string>
+
+    <string name="password_field_title">Password</string>
+    <string name="password_field_show_password">"Show password"</string>
+    <string name="password_field_hide_password">"Hide password"</string>
+    <string name="password_field_empty_error_text">Enter Password</string>
+    <string name="password_field_invalid_error_text">Password too short</string>
+
+    <string name="password_confirm_field_title">Confirm Password</string>
+    <string name="password_confirm_error_text">Passwords should match</string>
+
+    <string name="sign_in_button_title">Sign in</string>
+    <string name="sign_up_button_title">Sign up</string>
+    <string name="sign_via_google_button_title">via Google</string>
+
+    <string name="auth_error_user_not_found_message">User not found</string>
+    <string name="auth_error_time_out_message">Server not responding</string>
+    <string name="auth_error_unknown_message">Something went wrong</string>
+
+</resources>

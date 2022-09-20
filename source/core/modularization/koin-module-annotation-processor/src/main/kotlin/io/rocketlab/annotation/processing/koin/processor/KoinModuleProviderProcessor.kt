@@ -15,7 +15,7 @@ import javax.lang.model.element.TypeElement
 
 @AutoService(Processor::class)
 @SupportedOptions(KAPT_OPTION)
-@IncrementalAnnotationProcessor(IncrementalAnnotationProcessorType.ISOLATING)
+@IncrementalAnnotationProcessor(IncrementalAnnotationProcessorType.AGGREGATING)
 class KoinModuleProviderProcessor : AbstractProcessor() {
 
     override fun getSupportedSourceVersion(): SourceVersion {

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,7 +15,6 @@ import androidx.compose.ui.res.painterResource
 import io.rocketlab.screen.splash.presentation.model.SplashState
 import io.rocketlab.screen.splash.presentation.viewmodel.SplashViewModel
 import io.rocketlab.ui.R
-import io.rocketlab.ui.theme.Brand1
 import org.koin.androidx.compose.inject
 
 @Composable
@@ -28,7 +28,7 @@ fun SplashScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brand1)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_rocket),
