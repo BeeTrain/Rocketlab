@@ -35,13 +35,14 @@ import io.rocketlab.ui.extension.hideKeyboardOnClick
 import io.rocketlab.ui.progress.CircularProgress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getViewModel
 import org.koin.androidx.compose.inject
 
 @Composable
 fun SignUpScreen(
+    viewModel: SignUpViewModel = getViewModel(),
     onRegistered: () -> Unit
 ) {
-    val viewModel by inject<SignUpViewModel>()
     val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState.collectAsState()
     val errorState by viewModel.errorState.collectAsState()

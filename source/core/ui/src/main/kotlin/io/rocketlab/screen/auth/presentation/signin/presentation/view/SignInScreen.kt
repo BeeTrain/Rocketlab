@@ -47,18 +47,16 @@ import io.rocketlab.ui.extension.supportWideScreen
 import io.rocketlab.ui.progress.CircularProgress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.inject
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun SignInScreen(
+    viewModel: SignInViewModel = getViewModel(),
     onRegisterClicked: (() -> Unit),
     onLogged: (() -> Unit)
 ) {
-    val viewModel by inject<SignInViewModel>()
     val focusManager = LocalFocusManager.current
-    val interactionSource = remember { MutableInteractionSource() }
     val scaffoldState = rememberScaffoldState()
-    val coroutineScope = rememberCoroutineScope()
 
     val uiState by viewModel.uiState.collectAsState()
     val errorState by viewModel.errorState.collectAsState()
@@ -87,7 +85,7 @@ fun SignInScreen(
                 .fillMaxSize()
                 .supportWideScreen()
                 .clickable(
-                    interactionSource = interactionSource,
+                    interactionSource = remember { MutableInteractionSource() },
                     indication = null,
                     onClick = { focusManager.clearFocus() }
                 )
@@ -100,7 +98,7 @@ fun SignInScreen(
                 is SignInScreenState.Loading -> renderLoading()
             }
             if (errorState.message.isNotEmpty()) {
-                renderError(coroutineScope, scaffoldState, errorState)
+                renderError(scaffoldState, errorState)
                 viewModel.onErrorShowedAction.accept()
             }
         }
@@ -177,9 +175,9 @@ private fun BoxScope.renderContent(
 
 @Composable
 private fun renderError(
-    coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState,
-    error: SignInErrorState
+    error: SignInErrorState,
+    coroutineScope: CoroutineScope = rememberCoroutineScope()
 ) {
     coroutineScope.launch {
         scaffoldState.snackbarHostState.showSnackbar(

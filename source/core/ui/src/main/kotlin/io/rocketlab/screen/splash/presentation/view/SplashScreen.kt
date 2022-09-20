@@ -15,14 +15,14 @@ import androidx.compose.ui.res.painterResource
 import io.rocketlab.screen.splash.presentation.model.SplashState
 import io.rocketlab.screen.splash.presentation.viewmodel.SplashViewModel
 import io.rocketlab.ui.R
-import org.koin.androidx.compose.inject
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun SplashScreen(
+    viewModel: SplashViewModel = getViewModel(),
     onLogged: () -> Unit,
     onNotLogged: () -> Unit
 ) {
-    val viewModel by inject<SplashViewModel>()
     val uiState by viewModel.uiState.collectAsState(SplashState.Loading)
 
     Box(
