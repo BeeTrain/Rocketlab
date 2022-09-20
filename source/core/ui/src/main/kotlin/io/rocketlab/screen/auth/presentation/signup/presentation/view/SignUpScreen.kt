@@ -1,6 +1,5 @@
 package io.rocketlab.screen.auth.presentation.signup.presentation.view
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,19 +34,15 @@ import io.rocketlab.ui.progress.CircularProgress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
-import org.koin.androidx.compose.inject
 
 @Composable
 fun SignUpScreen(
-    viewModel: SignUpViewModel = getViewModel(),
-    onRegistered: () -> Unit
+    viewModel: SignUpViewModel = getViewModel()
 ) {
-    val focusManager = LocalFocusManager.current
     val uiState by viewModel.uiState.collectAsState()
     val errorState by viewModel.errorState.collectAsState()
-    val interactionSource = remember { MutableInteractionSource() }
+
     val scaffoldState = rememberScaffoldState()
-    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         scaffoldState = scaffoldState
@@ -56,14 +50,14 @@ fun SignUpScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .hideKeyboardOnClick(interactionSource, focusManager)
+                .hideKeyboardOnClick(LocalFocusManager.current)
         ) {
             when (uiState) {
                 is SignUpScreenState.Loading -> renderLoading()
-                is SignUpScreenState.Content -> renderContent(uiState.asContent(), viewModel, onRegistered)
+                is SignUpScreenState.Content -> renderContent(uiState.asContent(), viewModel)
             }
             if (errorState.message.isNotEmpty()) {
-                renderError(coroutineScope, scaffoldState, errorState)
+                renderError(scaffoldState, errorState)
                 viewModel.onErrorShowedAction.accept()
             }
         }
@@ -82,8 +76,7 @@ private fun BoxScope.renderLoading() {
 @Composable
 private fun BoxScope.renderContent(
     uiState: SignUpScreenState.Content,
-    viewModel: SignUpViewModel,
-    onRegistered: () -> Unit,
+    viewModel: SignUpViewModel
 ) {
     Column(
         modifier = Modifier
@@ -110,7 +103,7 @@ private fun BoxScope.renderContent(
         )
         Button(
             enabled = uiState.isFieldsValid,
-            onClick = { viewModel.registerClickedAction.accept(onRegistered) },
+            onClick = { viewModel.registerClickedAction.accept() },
             content = { Text(stringResource(R.string.sign_up_button_title)) },
             modifier = Modifier
                 .padding(vertical = 8.dp)
@@ -121,9 +114,9 @@ private fun BoxScope.renderContent(
 
 @Composable
 private fun renderError(
-    coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState,
-    error: SignUpErrorState
+    error: SignUpErrorState,
+    coroutineScope: CoroutineScope = rememberCoroutineScope()
 ) {
     coroutineScope.launch {
         scaffoldState.snackbarHostState.showSnackbar(

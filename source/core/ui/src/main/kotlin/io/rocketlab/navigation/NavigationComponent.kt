@@ -13,12 +13,16 @@ import io.rocketlab.screen.auth.presentation.signup.presentation.view.SignUpScre
 import io.rocketlab.screen.home.presentation.HomeScreen
 import io.rocketlab.screen.notes.presentation.NotesScreen
 import io.rocketlab.screen.splash.presentation.view.SplashScreen
+import org.koin.androidx.compose.get
 
 @OptIn(ExperimentalMaterialNavigationApi::class)
 @Composable
-fun NavigationComponent() {
+fun NavigationComponent(
+    navigator: Navigator = get()
+) {
     val bottomSheetNavigator = rememberBottomSheetNavigator()
     val navController = rememberNavController(bottomSheetNavigator)
+    navigator.bind(navController)
 
     ModalBottomSheetLayout(bottomSheetNavigator) {
         NavHost(
@@ -26,43 +30,13 @@ fun NavigationComponent() {
             startDestination = Destination.Splash
         ) {
             composable(Destination.Splash) {
-                SplashScreen(
-                    onLogged = {
-                        navController.navigate(Destination.Home) {
-                            popUpTo(Destination.Splash.route) {
-                                inclusive = true
-                            }
-                        }
-                    },
-                    onNotLogged = {
-                        navController.navigate(Destination.SignIn) {
-                            popUpTo(Destination.Splash.route) {
-                                inclusive = true
-                            }
-                        }
-                    }
-                )
+                SplashScreen()
             }
             composable(Destination.SignIn) {
-                SignInScreen(
-                    onRegisterClicked = { navController.navigate(Destination.SignUp) },
-                    onLogged = {
-                        navController.navigate(Destination.Home) {
-                            popUpTo(Destination.SignIn.route) {
-                                inclusive = true
-                            }
-                        }
-                    }
-                )
+                SignInScreen()
             }
             composable(Destination.SignUp) {
-                SignUpScreen {
-                    navController.navigate(Destination.Home) {
-                        popUpTo(Destination.Splash.route) {
-                            inclusive = true
-                        }
-                    }
-                }
+                SignUpScreen()
             }
             composable(Destination.Home) {
                 HomeScreen {

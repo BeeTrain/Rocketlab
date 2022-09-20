@@ -4,9 +4,10 @@ import android.content.Intent
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import io.rocketlab.arch.extension.action
 import io.rocketlab.arch.extension.command
-import io.rocketlab.arch.extension.emit
 import io.rocketlab.arch.extension.state
 import io.rocketlab.arch.presentation.viewmodel.BaseViewModel
+import io.rocketlab.navigation.Destination
+import io.rocketlab.navigation.Navigator
 import io.rocketlab.screen.auth.presentation.mapper.SigningErrorMapper
 import io.rocketlab.screen.auth.presentation.signin.presentation.model.SignInErrorState
 import io.rocketlab.screen.auth.presentation.signin.presentation.model.SignInScreenState
@@ -17,14 +18,13 @@ import kotlinx.coroutines.flow.update
 class SignInViewModel(
     private val authService: AuthService,
     private val signingValidator: SigningValidator,
-    private val errorMapper: SigningErrorMapper
+    private val errorMapper: SigningErrorMapper,
+    private val navigator: Navigator
 ) : BaseViewModel() {
 
     val uiState = state<SignInScreenState>(SignInScreenState.Content())
     val errorState = state(SignInErrorState())
 
-    val openSignUpCommand = command<Unit>()
-    val onLoggedCommand = command<Unit>()
     val launchGoogleSignCommand = command<Intent>()
 
     val onErrorShowedAction = action<Unit> { onErrorShowed() }
@@ -117,16 +117,22 @@ class SignInViewModel(
             uiState.update { SignInScreenState.Loading }
             authService.signInWithCredentials(
                 contentState.credentials,
-                onSuccess = { launch { onLoggedCommand.emit() } },
+                onSuccess = { onLogged() },
                 onFailure = { exception -> handleError(exception, contentState) }
             )
         }
     }
 
-    private fun onRegisterClicked() {
-        launch {
-            openSignUpCommand.emit()
+    private fun onLogged() {
+        navigator.navigate(Destination.Home) {
+            popUpTo(Destination.SignIn.route) {
+                inclusive = true
+            }
         }
+    }
+
+    private fun onRegisterClicked() {
+        navigator.navigate(Destination.SignUp)
     }
 
     private fun onGoogleSignClick() {
@@ -141,7 +147,7 @@ class SignInViewModel(
 
         authService.signInWithGoogleSign(
             account = account,
-            onSuccess = { launch { onLoggedCommand.emit() } },
+            onSuccess = { onLogged() },
             onFailure = { exception -> handleError(exception, contentState) }
         )
     }

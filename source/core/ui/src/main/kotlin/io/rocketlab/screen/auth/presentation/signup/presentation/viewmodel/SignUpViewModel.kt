@@ -3,6 +3,8 @@ package io.rocketlab.screen.auth.presentation.signup.presentation.viewmodel
 import io.rocketlab.arch.extension.action
 import io.rocketlab.arch.extension.state
 import io.rocketlab.arch.presentation.viewmodel.BaseViewModel
+import io.rocketlab.navigation.Destination
+import io.rocketlab.navigation.Navigator
 import io.rocketlab.screen.auth.presentation.mapper.SigningErrorMapper
 import io.rocketlab.screen.auth.presentation.signup.presentation.model.SignUpErrorState
 import io.rocketlab.screen.auth.presentation.signup.presentation.model.SignUpScreenState
@@ -13,7 +15,8 @@ import kotlinx.coroutines.flow.update
 class SignUpViewModel(
     private val authService: AuthService,
     private val signingValidator: SigningValidator,
-    private val errorMapper: SigningErrorMapper
+    private val errorMapper: SigningErrorMapper,
+    private val navigator: Navigator
 ) : BaseViewModel() {
 
     val uiState = state<SignUpScreenState>(SignUpScreenState.Content())
@@ -32,7 +35,7 @@ class SignUpViewModel(
     val validatePasswordConfirmAction = action<Unit> { validatePasswordConfirm() }
     val updatePasswordConfirmVisibilityAction = action<Unit> { onPasswordConfirmVisibilityChanged() }
 
-    val registerClickedAction = action(::registerUser)
+    val registerClickedAction = action<Unit> { registerUser() }
 
     private fun onErrorShowed() {
         errorState.update { SignUpErrorState() }
@@ -145,7 +148,7 @@ class SignUpViewModel(
         }
     }
 
-    private fun registerUser(onRegistered: (() -> Unit)) {
+    private fun registerUser() {
         validateEmail()
         validatePassword()
         validatePasswordConfirm()
@@ -155,7 +158,7 @@ class SignUpViewModel(
             uiState.update { SignUpScreenState.Loading }
             authService.registerUser(
                 credentials = contentState.credentials,
-                onSuccess = { onRegistered.invoke() },
+                onSuccess = { openHomeScreen() },
                 onFailure = { exception -> handleError(exception, contentState) }
             )
         }
@@ -165,5 +168,13 @@ class SignUpViewModel(
         val error = errorMapper.map(exception)
         uiState.update { contentState }
         errorState.update { SignUpErrorState(error) }
+    }
+
+    private fun openHomeScreen() {
+        navigator.navigate(Destination.Home) {
+            popUpTo(Destination.Splash.route) {
+                inclusive = true
+            }
+        }
     }
 }

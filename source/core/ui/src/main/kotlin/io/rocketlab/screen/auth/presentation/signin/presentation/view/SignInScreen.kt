@@ -5,7 +5,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -25,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,6 +41,7 @@ import io.rocketlab.screen.auth.presentation.signin.presentation.viewmodel.SignI
 import io.rocketlab.screen.auth.presentation.view.text.email.EmailField
 import io.rocketlab.screen.auth.presentation.view.text.password.PasswordField
 import io.rocketlab.ui.R
+import io.rocketlab.ui.extension.hideKeyboardOnClick
 import io.rocketlab.ui.extension.supportWideScreen
 import io.rocketlab.ui.progress.CircularProgress
 import kotlinx.coroutines.CoroutineScope
@@ -51,19 +50,14 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun SignInScreen(
-    viewModel: SignInViewModel = getViewModel(),
-    onRegisterClicked: (() -> Unit),
-    onLogged: (() -> Unit)
+    viewModel: SignInViewModel = getViewModel()
 ) {
-    val focusManager = LocalFocusManager.current
     val scaffoldState = rememberScaffoldState()
 
     val uiState by viewModel.uiState.collectAsState()
     val errorState by viewModel.errorState.collectAsState()
 
-    val openSignUpCommand by viewModel.openSignUpCommand.collectAsCommand()
     val googleSignCommand by viewModel.launchGoogleSignCommand.collectAsCommand()
-    val onLoggedCommand by viewModel.onLoggedCommand.collectAsCommand()
 
     val startForResult = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -84,11 +78,7 @@ fun SignInScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .supportWideScreen()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = { focusManager.clearFocus() }
-                )
+                .hideKeyboardOnClick(LocalFocusManager.current)
         ) {
             when (uiState) {
                 is SignInScreenState.Content -> renderContent(
@@ -103,14 +93,8 @@ fun SignInScreen(
             }
         }
     }
-    LaunchedEffect(openSignUpCommand) {
-        openSignUpCommand?.let { onRegisterClicked.invoke() }
-    }
     LaunchedEffect(googleSignCommand) {
         googleSignCommand?.let { startForResult.launch(it) }
-    }
-    LaunchedEffect(onLoggedCommand) {
-        onLoggedCommand?.let { onLogged.invoke() }
     }
 }
 

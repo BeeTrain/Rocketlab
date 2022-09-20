@@ -2,44 +2,50 @@ package io.rocketlab.screen.splash.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.rocketlab.arch.lifecycle.SingleSharedFlow
+import io.rocketlab.arch.extension.action
+import io.rocketlab.navigation.Destination
+import io.rocketlab.navigation.Navigator
 import io.rocketlab.service.auth.AuthService
-import io.rocketlab.screen.splash.presentation.model.SplashState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val DEFAULT_DELAY = 1000L
 
 class SplashViewModel(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val navigator: Navigator
 ) : ViewModel() {
 
-    val uiState = SingleSharedFlow<SplashState>()
-
-    init {
-        loadData()
-    }
+    val loadDataAction = action<Unit> { loadData() }
 
     private fun loadData() {
         viewModelScope.launch {
             delay(DEFAULT_DELAY)
-            uiState.emit(
-                SplashState.Data(
-                    isLogged = authService.isLogged
-                )
-            )
+            navigateToNextScreen(authService.isLogged)
         }
     }
 
-    fun navigateToNextScreen(
-        isLogged: Boolean,
-        onLogged: () -> Unit,
-        onNotLogged: () -> Unit
-    ) {
+    private fun navigateToNextScreen(isLogged: Boolean) {
         if (isLogged) {
-            onLogged.invoke()
+            openAuthScreen()
         } else {
-            onNotLogged.invoke()
+            openHomeScreen()
+        }
+    }
+
+    private fun openAuthScreen() {
+        navigator.navigate(Destination.Home) {
+            popUpTo(Destination.Splash.route) {
+                inclusive = true
+            }
+        }
+    }
+
+    private fun openHomeScreen() {
+        navigator.navigate(Destination.SignIn) {
+            popUpTo(Destination.Splash.route) {
+                inclusive = true
+            }
         }
     }
 }

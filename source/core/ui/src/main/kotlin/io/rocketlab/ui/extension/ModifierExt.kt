@@ -5,7 +5,9 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -13,9 +15,10 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.dp
 
+@Composable
 fun Modifier.hideKeyboardOnClick(
-    interactionSource: MutableInteractionSource,
-    focusManager: FocusManager
+    focusManager: FocusManager,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
 ): Modifier {
     return this.clickable(
         interactionSource = interactionSource,

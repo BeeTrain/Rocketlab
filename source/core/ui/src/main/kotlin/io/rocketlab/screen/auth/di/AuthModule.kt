@@ -13,8 +13,8 @@ import org.koin.dsl.module
 @KoinModule
 val authModule = module {
 
-    viewModel { SignUpViewModel(get(), get(), get()) }
-    viewModel { SignInViewModel(get(), get(), get()) }
+    viewModel { SignUpViewModel(get(), get(), get(), get()) }
+    viewModel { SignInViewModel(get(), get(), get(), get()) }
 
     factory { SigningErrorMapper(get()) }
 

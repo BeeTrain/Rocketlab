@@ -8,5 +8,5 @@ import org.koin.dsl.module
 @KoinModule
 val splashModule = module {
 
-    viewModel { SplashViewModel(get()) }
+    viewModel { SplashViewModel(get(), get()) }
 }
