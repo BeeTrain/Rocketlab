@@ -7,7 +7,6 @@ import com.google.accompanist.navigation.material.ModalBottomSheetLayout
 import com.google.accompanist.navigation.material.rememberBottomSheetNavigator
 import io.rocketlab.navigation.extension.NavHost
 import io.rocketlab.navigation.extension.composable
-import io.rocketlab.navigation.extension.navigate
 import io.rocketlab.screen.auth.presentation.signin.presentation.view.SignInScreen
 import io.rocketlab.screen.auth.presentation.signup.presentation.view.SignUpScreen
 import io.rocketlab.screen.home.presentation.HomeScreen
@@ -39,9 +38,7 @@ fun NavigationComponent(
                 SignUpScreen()
             }
             composable(Destination.Home) {
-                HomeScreen {
-                    navController.navigate(Destination.Notes)
-                }
+                HomeScreen()
             }
             composable(Destination.Notes) {
                 NotesScreen()

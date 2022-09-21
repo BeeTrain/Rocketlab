@@ -3,9 +3,6 @@
 
     <string name="back">Back</string>
 
-    <string name="sign_up_screen_title">Create account</string>
-    <string name="home_screen_title">Home</string>
-
     <string name="e_mail_field_title">E-mail</string>
     <string name="e_mail_field_empty_error_text">Enter e-mail</string>
     <string name="e_mail_field_invalid_error_text">Enter correct e-mail</string>
@@ -19,6 +16,7 @@
     <string name="password_confirm_field_title">Confirm Password</string>
     <string name="password_confirm_error_text">Passwords should match</string>
 
+    <string name="sign_up_screen_title">Create account</string>
     <string name="sign_in_button_title">Sign in</string>
     <string name="sign_up_button_title">Sign up</string>
     <string name="sign_via_google_button_title">via Google</string>
@@ -26,5 +24,9 @@
     <string name="auth_error_user_not_found_message">User not found</string>
     <string name="auth_error_time_out_message">Server not responding</string>
     <string name="auth_error_unknown_message">Something went wrong</string>
+
+    <string name="home_screen_title">Home</string>
+    <string name="home_screen_add_note_title">add title</string>
+    <string name="home_screen_empty_state_image_url">https://assets10.lottiefiles.com/private_files/lf30_p5tali1o.json</string>
 
 </resources>

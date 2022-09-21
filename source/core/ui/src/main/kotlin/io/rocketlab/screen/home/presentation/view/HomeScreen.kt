@@ -2,13 +2,13 @@ package io.rocketlab.screen.home.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,15 +18,17 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import io.rocketlab.arch.extension.accept
+import io.rocketlab.screen.home.presentation.viewmodel.HomeScreenViewModel
 import io.rocketlab.ui.R
 import io.rocketlab.ui.appbar.AppBar
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun HomeScreen(
-    onNotesClicked: () -> Unit
+    viewModel: HomeScreenViewModel = getViewModel(),
 ) {
     val composition by rememberLottieComposition(
-        LottieCompositionSpec.Url("https://assets10.lottiefiles.com/private_files/lf30_p5tali1o.json")
+        LottieCompositionSpec.Url(stringResource(R.string.home_screen_empty_state_image_url))
     )
     Scaffold(
         topBar = { AppBar(title = stringResource(id = R.string.home_screen_title)) },
@@ -44,9 +46,14 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                modifier = Modifier.navigationBarsPadding(),
-                onClick = { onNotesClicked.invoke() },
-                content = {}
+                onClick = { viewModel.onNotesClickedAction.accept() },
+                content = {
+                    androidx.compose.material.Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = stringResource(R.string.home_screen_add_note_title),
+                        tint = MaterialTheme.colorScheme.onBackground
+                    )
+                }
             )
         }
     )
