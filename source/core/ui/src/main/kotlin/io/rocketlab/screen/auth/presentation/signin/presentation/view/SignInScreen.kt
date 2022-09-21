@@ -43,6 +43,7 @@ import io.rocketlab.screen.auth.presentation.signin.presentation.model.SignInErr
 import io.rocketlab.screen.auth.presentation.signin.presentation.model.SignInScreenState
 import io.rocketlab.screen.auth.presentation.signin.presentation.viewmodel.SignInViewModel
 import io.rocketlab.screen.auth.presentation.view.branding.Branding
+import io.rocketlab.screen.auth.presentation.view.button.GoogleSignButton
 import io.rocketlab.screen.auth.presentation.view.text.email.EmailField
 import io.rocketlab.screen.auth.presentation.view.text.password.PasswordField
 import io.rocketlab.ui.R
@@ -139,13 +140,9 @@ private fun BoxScope.renderContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Row {
-            Image(
-                painter = painterResource(id = R.drawable.ic_google),
-                contentDescription = stringResource(R.string.sign_via_google_button_title),
-                modifier = Modifier
-                    .size(40.dp)
-                    .align(Alignment.CenterVertically)
-                    .clickable { viewModel.googleSignClickedAction.accept() }
+            GoogleSignButton(
+                onClick = { viewModel.googleSignClickedAction.accept() },
+                modifier = Modifier.align(Alignment.CenterVertically)
             )
             Spacer(modifier = Modifier.weight(1f))
             Button(
