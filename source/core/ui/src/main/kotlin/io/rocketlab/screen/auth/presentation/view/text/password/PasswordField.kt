@@ -21,7 +21,8 @@ fun PasswordField(
     passwordState: PasswordFieldState = remember { PasswordFieldState() },
     updateValueAction: (String) -> Unit = {},
     validateValueAction: (FocusState) -> Unit = {},
-    updatePasswordVisibilityAction: () -> Unit = {}
+    updatePasswordVisibilityAction: () -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
     val isPasswordFocused = remember { mutableStateOf(false) }
 
@@ -39,14 +40,15 @@ fun PasswordField(
                 content = {
                     Icon(
                         imageVector = passwordState.visibilityIcon,
-                        contentDescription = stringResource(passwordState.descriptionRes)
+                        contentDescription = stringResource(passwordState.descriptionRes),
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
             )
         },
         singleLine = true,
         maxLines = 1,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .afterFocusChanged(isPasswordFocused, validateValueAction)
     )
@@ -57,11 +59,13 @@ fun PasswordConfirmField(
     passwordState: PasswordFieldState = remember { PasswordFieldState() },
     updateValueAction: (String) -> Unit = {},
     validateValueAction: (FocusState) -> Unit = {},
-    updatePasswordVisibilityAction: () -> Unit = {}
+    updatePasswordVisibilityAction: () -> Unit = {},
+    modifier: Modifier = Modifier
 ) = PasswordField(
     label = stringResource(R.string.password_confirm_field_title),
     passwordState = passwordState,
     updateValueAction = updateValueAction,
     validateValueAction = validateValueAction,
-    updatePasswordVisibilityAction = updatePasswordVisibilityAction
+    updatePasswordVisibilityAction = updatePasswordVisibilityAction,
+    modifier = modifier
 )

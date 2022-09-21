@@ -23,6 +23,7 @@ class SignUpViewModel(
     val errorState = state(SignUpErrorState())
 
     val onErrorShowedAction = action<Unit> { onErrorShowed() }
+    val onBackPressedAction = action<Unit> { onBackPressed() }
 
     val updateEmailAction = action<String> { updateEmail(it) }
     val validateEmailAction = action<Unit> { validateEmail() }
@@ -36,6 +37,10 @@ class SignUpViewModel(
     val updatePasswordConfirmVisibilityAction = action<Unit> { onPasswordConfirmVisibilityChanged() }
 
     val registerClickedAction = action<Unit> { registerUser() }
+
+    private fun onBackPressed() {
+        navigator.navigateUp()
+    }
 
     private fun onErrorShowed() {
         errorState.update { SignUpErrorState() }

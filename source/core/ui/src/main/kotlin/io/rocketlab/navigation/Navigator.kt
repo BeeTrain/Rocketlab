@@ -12,6 +12,10 @@ class Navigator {
         this.navController = navController
     }
 
+    fun navigateUp() {
+        requireNotNull(navController).navigateUp()
+    }
+
     fun navigate(destination: Destination, builder: NavOptionsBuilder.() -> Unit = {}) {
         requireNotNull(navController).navigate(destination, builder)
     }

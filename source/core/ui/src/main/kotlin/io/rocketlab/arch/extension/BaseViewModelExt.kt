@@ -1,6 +1,8 @@
 package io.rocketlab.arch.extension
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import io.rocketlab.arch.lifecycle.SingleSharedFlow
 import io.rocketlab.arch.presentation.viewmodel.action.Action
@@ -28,4 +30,10 @@ suspend fun MutableSharedFlow<Unit>.emit() = emit(Unit)
 fun MutableSharedFlow<Unit>.tryEmit() = tryEmit(Unit)
 
 @Composable
-fun <T : R, R> Flow<T>.collectAsCommand() = collectAsState(initial = null)
+fun <T : R, R> Flow<T>.collectAsCommand(onCommand: (T) -> Unit): State<T?> {
+    return collectAsState(initial = null).also { state ->
+        LaunchedEffect(state.value) {
+            state.value?.let(onCommand)
+        }
+    }
+}

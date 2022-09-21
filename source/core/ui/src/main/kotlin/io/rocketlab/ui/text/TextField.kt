@@ -56,7 +56,8 @@ fun TextField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = MaterialTheme.shapes.small,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(
-        disabledTextColor = Color.Black
+        disabledTextColor = Color.Black,
+        focusedBorderColor = MaterialTheme.colorScheme.secondary
     )
 ) {
     OutlinedTextField(

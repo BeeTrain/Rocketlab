@@ -19,7 +19,8 @@ import io.rocketlab.ui.text.TextFieldLabel
 fun EmailField(
     emailState: EmailFieldState = remember { EmailFieldState() },
     updateValueAction: (String) -> Unit = {},
-    validateValueAction: (FocusState) -> Unit = {}
+    validateValueAction: (FocusState) -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
     val isEmailFocused = remember { mutableStateOf(false) }
 
@@ -33,7 +34,7 @@ fun EmailField(
         textStyle = MaterialTheme.typography.bodyMedium,
         singleLine = true,
         maxLines = 1,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .afterFocusChanged(isEmailFocused) { validateValueAction.invoke(it) }
     )

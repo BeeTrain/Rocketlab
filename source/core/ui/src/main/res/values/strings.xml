@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="back">Back</string>
+
+    <string name="sign_up_screen_title">Create account</string>
+
     <string name="e_mail_field_title">E-mail</string>
     <string name="e_mail_field_empty_error_text">Enter e-mail</string>
     <string name="e_mail_field_invalid_error_text">Enter correct e-mail</string>

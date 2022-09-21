@@ -1,5 +1,6 @@
 package io.rocketlab.screen.auth.presentation.signup.presentation.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -29,6 +31,7 @@ import io.rocketlab.screen.auth.presentation.view.text.email.EmailField
 import io.rocketlab.screen.auth.presentation.view.text.password.PasswordConfirmField
 import io.rocketlab.screen.auth.presentation.view.text.password.PasswordField
 import io.rocketlab.ui.R
+import io.rocketlab.ui.appbar.AppBar
 import io.rocketlab.ui.extension.hideKeyboardOnClick
 import io.rocketlab.ui.progress.CircularProgress
 import kotlinx.coroutines.CoroutineScope
@@ -45,12 +48,19 @@ fun SignUpScreen(
     val errorState by viewModel.errorState.collectAsState()
 
     Scaffold(
-        scaffoldState = scaffoldState
+        scaffoldState = scaffoldState,
+        topBar = {
+            AppBar(
+                title = stringResource(id = R.string.sign_up_screen_title),
+                onBackPressed = { viewModel.onBackPressedAction.accept() }
+            )
+        }
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .hideKeyboardOnClick(LocalFocusManager.current)
+                .background(MaterialTheme.colorScheme.background)
         ) {
             when (uiState) {
                 is SignUpScreenState.Loading -> renderLoading()
