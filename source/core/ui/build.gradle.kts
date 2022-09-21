@@ -2,6 +2,8 @@ import AndroidDependencies.navigation
 import ComposeDependencies.compose
 import DIDependencies.koin
 import FirebaseDependencies.firebase
+import MiscDependencies.coil
+import MiscDependencies.lottie
 import extension.setupCompose
 
 plugins {
@@ -16,4 +18,7 @@ dependencies {
     firebase()
     compose()
     navigation()
+
+    coil()
+    lottie()
 }

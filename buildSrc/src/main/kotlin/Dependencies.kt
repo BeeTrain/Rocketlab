@@ -178,6 +178,26 @@ object FirebaseDependencies {
     }
 }
 
+object MiscDependencies {
+
+    object Versions {
+
+        const val coil = "2.2.1"
+        const val lottie = "5.2.0"
+    }
+
+    const val coil = "io.coil-kt:coil-compose:${Versions.coil}"
+    const val lottie = "com.airbnb.android:lottie-compose:${Versions.lottie}"
+
+    fun DependencyHandler.coil() = apply {
+        implementation(coil)
+    }
+
+    fun DependencyHandler.lottie() = apply {
+        implementation(lottie)
+    }
+}
+
 object AnnotationProcessingDependencies {
 
     object Versions {

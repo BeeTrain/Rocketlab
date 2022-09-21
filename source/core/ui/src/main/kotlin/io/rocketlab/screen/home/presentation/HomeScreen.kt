@@ -1,5 +1,6 @@
 package io.rocketlab.screen.home.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,17 +9,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
+import io.rocketlab.arch.extension.accept
+import io.rocketlab.ui.R
+import io.rocketlab.ui.appbar.AppBar
 
 @Composable
 fun HomeScreen(
     onNotesClicked: () -> Unit
 ) {
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.Url("https://assets10.lottiefiles.com/private_files/lf30_p5tali1o.json")
+    )
     Scaffold(
-        topBar = { Spacer(modifier = Modifier.statusBarsPadding()) },
+        topBar = { AppBar(title = stringResource(id = R.string.home_screen_title)) },
         modifier = Modifier
             .navigationBarsPadding(),
         content = { paddingValues ->
@@ -26,11 +37,9 @@ fun HomeScreen(
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
             ) {
-                Text(
-                    text = "Home",
-                    modifier = Modifier.align(Alignment.Center)
-                )
+                LottieAnimation(composition)
             }
         },
         floatingActionButton = {
