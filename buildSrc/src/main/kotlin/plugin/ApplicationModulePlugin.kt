@@ -84,6 +84,7 @@ class ApplicationModulePlugin : Plugin<Project> {
 
             buildFeatures {
                 compose = true
+                buildConfig = true
             }
 
             composeOptions {

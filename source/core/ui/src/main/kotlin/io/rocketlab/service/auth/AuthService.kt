@@ -4,124 +4,51 @@ import android.content.Intent
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import io.rocketlab.service.auth.exception.AuthServerTimeoutException
+import io.rocketlab.service.auth.impl.DebugAuthService
+import io.rocketlab.service.auth.impl.ProdAuthService
 import io.rocketlab.service.auth.model.Credentials
-import io.rocketlab.utils.extension.catchError
-import java.util.Timer
-import java.util.concurrent.TimeUnit
-import kotlin.concurrent.schedule
+import io.rocketlab.utils.system.config.Environment
 
-private const val DEFAULT_TIMEOUT = 30L
+interface AuthService {
 
-class AuthService(
-    private val firebaseAuth: FirebaseAuth,
-    private val googleSignInClient: GoogleSignInClient
-) {
+    class Provider(
+        private val firebaseAuth: FirebaseAuth,
+        private val googleSignInClient: GoogleSignInClient,
+        private val environment: Environment
+    ) {
 
-    private val firebaseUser: FirebaseUser?
-        get() = firebaseAuth.currentUser
+        fun provide(): AuthService {
+            val prodAuthService = ProdAuthService(firebaseAuth, googleSignInClient)
+
+            return if (environment.isDebug) {
+                DebugAuthService(prodAuthService)
+            } else {
+                prodAuthService
+            }
+        }
+    }
 
     val isLogged: Boolean
-        get() = firebaseUser != null
 
-    fun getGoogleSignInIntent(): Intent {
-        return googleSignInClient.signInIntent
-    }
+    fun getGoogleSignInIntent(): Intent
 
     fun registerUser(
         credentials: Credentials,
         onSuccess: (Task<AuthResult>) -> Unit,
         onFailure: (Exception) -> Unit
-    ) {
-        catchError(
-            createUserWithEmailAndPassword(credentials, onSuccess, onFailure),
-            onFailure
-        )
-    }
+    )
 
     fun signInWithGoogleSign(
         account: GoogleSignInAccount,
         onSuccess: (Task<AuthResult>) -> Unit,
         onFailure: (Exception) -> Unit
-    ) {
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-
-        catchError(
-            signInWithGoogleCredentials(credential, onSuccess, onFailure),
-            onFailure
-        )
-    }
+    )
 
     fun signInWithCredentials(
         credentials: Credentials,
         onSuccess: ((Task<AuthResult>) -> Unit),
         onFailure: ((Exception) -> Unit) = {}
-    ) {
-        catchError(
-            signInWithEmailAndPassword(credentials, onSuccess, onFailure),
-            onFailure
-        )
-    }
-
-    private fun signInWithEmailAndPassword(
-        credentials: Credentials,
-        onSuccess: (Task<AuthResult>) -> Unit,
-        onFailure: (Exception) -> Unit
-    ): () -> Unit {
-        return {
-            var isActive = true
-
-            firebaseAuth.signInWithEmailAndPassword(credentials.email, credentials.password)
-                .addOnCompleteListener { if (isActive) onSuccess.invoke(it) }
-                .addOnFailureListener { if (isActive) onFailure.invoke(it) }
-
-            Timer().schedule(TimeUnit.SECONDS.toMillis(DEFAULT_TIMEOUT)) {
-                isActive = false
-                onFailure.invoke(AuthServerTimeoutException())
-            }
-        }
-    }
-
-    private fun createUserWithEmailAndPassword(
-        credentials: Credentials,
-        onSuccess: (Task<AuthResult>) -> Unit,
-        onFailure: (Exception) -> Unit
-    ): () -> Unit {
-        return {
-            var isActive = true
-
-            firebaseAuth.createUserWithEmailAndPassword(credentials.email, credentials.password)
-                .addOnCompleteListener { if (isActive) onSuccess.invoke(it) }
-                .addOnFailureListener { if (isActive) onFailure.invoke(it) }
-
-            Timer().schedule(TimeUnit.SECONDS.toMillis(DEFAULT_TIMEOUT)) {
-                isActive = false
-                onFailure.invoke(AuthServerTimeoutException())
-            }
-        }
-    }
-
-    private fun signInWithGoogleCredentials(
-        credential: AuthCredential,
-        onSuccess: (Task<AuthResult>) -> Unit,
-        onFailure: (Exception) -> Unit
-    ): () -> Unit {
-        return {
-            var isActive = true
-
-            firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener { if (isActive) onSuccess.invoke(it) }
-                .addOnFailureListener { if (isActive) onFailure.invoke(it) }
-
-            Timer().schedule(TimeUnit.SECONDS.toMillis(DEFAULT_TIMEOUT)) {
-                isActive = false
-                onFailure.invoke(AuthServerTimeoutException())
-            }
-        }
-    }
+    )
 }

@@ -12,7 +12,7 @@ import org.koin.dsl.module
 @KoinModule
 val serviceModule = module {
 
-    single { AuthService(get(), get()) }
+    single { AuthService.Provider(get(), get(), get()).provide() }
 
     single { FirebaseAuth.getInstance() }
 
