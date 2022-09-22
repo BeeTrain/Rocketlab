@@ -29,4 +29,7 @@
     <string name="home_screen_add_note_title">add title</string>
     <string name="home_screen_empty_state_image_url">https://assets10.lottiefiles.com/private_files/lf30_p5tali1o.json</string>
 
+    <string name="notes_screen_title">Notes</string>
+    <string name="notes_screen_empty_state_image_url">https://assets3.lottiefiles.com/packages/lf20_bd2pqqcm.json</string>
+
 </resources>

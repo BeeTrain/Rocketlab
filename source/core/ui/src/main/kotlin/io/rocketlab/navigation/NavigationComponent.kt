@@ -9,8 +9,8 @@ import io.rocketlab.navigation.extension.NavHost
 import io.rocketlab.navigation.extension.composable
 import io.rocketlab.screen.auth.presentation.signin.presentation.view.SignInScreen
 import io.rocketlab.screen.auth.presentation.signup.presentation.view.SignUpScreen
-import io.rocketlab.screen.home.presentation.HomeScreen
-import io.rocketlab.screen.notes.presentation.NotesScreen
+import io.rocketlab.screen.home.presentation.view.HomeScreen
+import io.rocketlab.screen.notes.presentation.view.NotesScreen
 import io.rocketlab.screen.splash.presentation.view.SplashScreen
 import org.koin.androidx.compose.get
 

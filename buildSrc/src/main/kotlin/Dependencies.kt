@@ -62,14 +62,17 @@ object ComposeDependencies {
         const val compiler = "1.3.0"
         const val functionality = "1.2.1"
         const val material3 = "1.0.0-beta02"
+        const val accompanist = "0.26.3-beta"
     }
 
     const val ui = "androidx.compose.ui:ui:${Versions.functionality}"
     const val material = "androidx.compose.material:material:${Versions.functionality}"
     const val material3 = "androidx.compose.material3:material3:${Versions.material3}"
     const val iconsExtended = "androidx.compose.material:material-icons-extended:${Versions.functionality}"
-    const val uiToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.functionality}"
 
+    const val accompanistSystemUi = "com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}"
+
+    const val uiToolingPreview = "androidx.compose.ui:ui-tooling-preview:${Versions.functionality}"
     const val uiTooling = "androidx.compose.ui:ui-tooling:${Versions.functionality}"
     const val uiTestManifest = "androidx.compose.ui:ui-test-manifest:${Versions.functionality}"
 
@@ -79,6 +82,7 @@ object ComposeDependencies {
         implementation(material3)
         implementation(iconsExtended)
         implementation(uiToolingPreview)
+        implementation(accompanistSystemUi)
         implementation(AndroidDependencies.activityCompose)
 
         debugImplementation(uiTooling)

@@ -21,3 +21,11 @@ inline fun <reified T : Throwable> catchError(
         error.invoke(e as T)
     }
 }
+
+fun <T> T?.ifNull(orValue: T): T {
+    return this ?: orValue
+}
+
+fun <T> T?.takeWhen(condition: Boolean): T? {
+    return if (condition) this else null
+}
