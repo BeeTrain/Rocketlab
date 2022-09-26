@@ -23,7 +23,7 @@ open class BaseViewModel : ViewModel() {
         }
     }
 
-    protected fun launch(
+    protected fun launchJob(
         error: MutableStateFlow<Throwable?>? = this.error,
         loading: MutableStateFlow<Boolean>? = this.loading,
         onError: ((Throwable) -> Unit)? = null,

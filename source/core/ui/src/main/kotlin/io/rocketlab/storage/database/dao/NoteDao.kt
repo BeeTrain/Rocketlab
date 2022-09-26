@@ -1,7 +1,6 @@
 package io.rocketlab.storage.database.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -14,12 +13,12 @@ interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(note: Note)
 
-    @Delete
-    suspend fun deleteNote(note: Note)
-
     @Query("SELECT * FROM Note")
     fun getAllNotes(): Flow<List<Note>>
 
     @Query("SELECT * FROM Note WHERE id=:id")
-    fun getNoteById(id: Int): Flow<Note>
+    suspend fun getNoteById(id: Int): Note?
+
+    @Query("DELETE FROM Note WHERE id=:id")
+    suspend fun deleteNoteById(id: Int)
 }

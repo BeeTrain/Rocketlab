@@ -10,4 +10,12 @@ class NoteEditorInteractor(
     suspend fun saveNote(note: Note) {
         noteEditorRepository.addNote(note)
     }
+
+    suspend fun loadNote(id: Int): Note? {
+        return noteEditorRepository.getNote(id)
+    }
+
+    suspend fun deleteNote(id: Int) {
+        noteEditorRepository.deleteNote(id)
+    }
 }

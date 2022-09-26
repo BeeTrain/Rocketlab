@@ -10,7 +10,7 @@ import org.koin.dsl.module
 @KoinModule
 val noteEditorModule = module {
 
-    viewModel { (noteId: Int?) -> NoteEditorViewModel(noteId, get(), get()) }
+    viewModel { NoteEditorViewModel(get(), get(), get()) }
 
     factory { NoteEditorInteractor(get()) }
 

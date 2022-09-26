@@ -136,7 +136,7 @@ class SignInViewModel(
     }
 
     private fun onGoogleSignClick() {
-        launch {
+        launchJob {
             val googleSignIntent = authService.getGoogleSignInIntent()
             launchGoogleSignCommand.emit(googleSignIntent)
         }

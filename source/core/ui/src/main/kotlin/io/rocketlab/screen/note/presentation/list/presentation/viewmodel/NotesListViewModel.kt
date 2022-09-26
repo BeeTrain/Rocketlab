@@ -1,6 +1,5 @@
 package io.rocketlab.screen.note.presentation.list.presentation.viewmodel
 
-import androidx.core.os.bundleOf
 import io.rocketlab.arch.extension.action
 import io.rocketlab.arch.presentation.viewmodel.BaseViewModel
 import io.rocketlab.navigation.Destination
@@ -25,7 +24,7 @@ class NotesListViewModel(
     }
 
     private fun loadNotes() {
-        launch {
+        launchJob {
             interactor.loadNotes().collect(notesState)
         }
     }
@@ -39,9 +38,9 @@ class NotesListViewModel(
     }
 
     private fun openNote(note: Note) {
-        val params = bundleOf(
+        val params = mapOf(
             Destination.NoteEditor.KEY_NOTE_ID to note.id
         )
-        navigator.navigate(Destination.NoteEditor)
+        navigator.navigate(Destination.NoteEditor, params)
     }
 }
