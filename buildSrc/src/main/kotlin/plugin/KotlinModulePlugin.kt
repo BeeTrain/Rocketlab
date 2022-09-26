@@ -24,6 +24,7 @@ class KotlinModulePlugin : Plugin<Project> {
     private fun Project.applyPlugins() {
         plugins.run {
             apply(Plugins.kotlinAndroid)
+            apply(Plugins.kotlinParcelize)
         }
     }
 

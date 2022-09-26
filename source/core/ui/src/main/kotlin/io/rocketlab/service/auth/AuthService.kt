@@ -13,13 +13,13 @@ import io.rocketlab.utils.system.config.Environment
 
 interface AuthService {
 
-    class Provider(
-        private val firebaseAuth: FirebaseAuth,
-        private val googleSignInClient: GoogleSignInClient,
-        private val environment: Environment
-    ) {
+    object Provider {
 
-        fun provide(): AuthService {
+        fun provide(
+            firebaseAuth: FirebaseAuth,
+            googleSignInClient: GoogleSignInClient,
+            environment: Environment
+        ): AuthService {
             val prodAuthService = ProdAuthService(firebaseAuth, googleSignInClient)
 
             return if (environment.isDebug) {

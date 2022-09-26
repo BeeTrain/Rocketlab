@@ -12,6 +12,6 @@ class HomeScreenViewModel(
     val onNotesClickedAction = action<Unit> { openNotes() }
 
     private fun openNotes() {
-        navigator.navigate(Destination.Notes)
+        navigator.navigate(Destination.NotesList)
     }
 }

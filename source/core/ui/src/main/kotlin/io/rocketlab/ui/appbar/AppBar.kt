@@ -1,5 +1,6 @@
 package io.rocketlab.ui.appbar
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
@@ -23,7 +24,8 @@ import io.rocketlab.ui.R
 @Composable
 fun AppBar(
     title: String = "",
-    onBackPressed: (() -> Unit)? = null
+    onBackPressed: (() -> Unit)? = null,
+    actions: @Composable (RowScope.() -> Unit) = { ActionsPlaceholder() }
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -45,8 +47,11 @@ fun AppBar(
                 }
             }
         },
-        actions = {
-            Spacer(modifier = Modifier.width(68.dp))
-        }
+        actions = actions
     )
+}
+
+@Composable
+private fun ActionsPlaceholder() {
+    Spacer(modifier = Modifier.width(68.dp))
 }

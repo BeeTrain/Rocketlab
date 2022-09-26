@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Notes
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -49,11 +50,12 @@ fun HomeScreen(
         floatingActionButton = {
             FloatingActionButton(
                 shape = fabShape,
+                containerColor = MaterialTheme.colorScheme.primary,
                 onClick = { viewModel.onNotesClickedAction.accept() },
                 content = {
                     Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = stringResource(R.string.home_screen_add_note_title),
+                        imageVector = Icons.Filled.Notes,
+                        contentDescription = stringResource(R.string.home_screen_notes_title),
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }

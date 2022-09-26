@@ -10,7 +10,8 @@ import io.rocketlab.navigation.extension.composable
 import io.rocketlab.screen.auth.presentation.signin.presentation.view.SignInScreen
 import io.rocketlab.screen.auth.presentation.signup.presentation.view.SignUpScreen
 import io.rocketlab.screen.home.presentation.view.HomeScreen
-import io.rocketlab.screen.notes.presentation.view.NotesScreen
+import io.rocketlab.screen.note.presentation.editor.presentation.view.NoteEditorScreen
+import io.rocketlab.screen.note.presentation.list.presentation.view.NotesListScreen
 import io.rocketlab.screen.splash.presentation.view.SplashScreen
 import org.koin.androidx.compose.get
 
@@ -40,8 +41,11 @@ fun NavigationComponent(
             composable(Destination.Home) {
                 HomeScreen()
             }
-            composable(Destination.Notes) {
-                NotesScreen()
+            composable(Destination.NotesList) {
+                NotesListScreen()
+            }
+            composable(Destination.NoteEditor) {
+                NoteEditorScreen()
             }
         }
     }

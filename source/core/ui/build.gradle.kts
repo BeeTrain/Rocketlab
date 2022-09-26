@@ -1,6 +1,7 @@
 import AndroidDependencies.navigation
 import ComposeDependencies.compose
 import DIDependencies.koin
+import DatabaseDependencies.room
 import FirebaseDependencies.firebase
 import MiscDependencies.coil
 import MiscDependencies.lottie
@@ -20,5 +21,6 @@ dependencies {
     navigation()
 
     coil()
+    room()
     lottie()
 }

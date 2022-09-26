@@ -25,6 +25,7 @@ object Plugins {
     const val kotlin = "kotlin"
     const val kotlinJVM = "org.jetbrains.kotlin.jvm"
     const val kotlinKapt = "kotlin-kapt"
+    const val kotlinParcelize = "kotlin-parcelize"
     const val javaLibrary = "java-library"
 
     const val googleServices = "com.google.gms.google-services"
@@ -179,6 +180,24 @@ object FirebaseDependencies {
         implementation(auth)
         implementation(uiAuth)
         implementation(AndroidDependencies.playServicesAuth)
+    }
+}
+
+object DatabaseDependencies {
+
+    object Versions {
+
+        const val room = "2.4.3"
+    }
+
+    const val room = "androidx.room:room-runtime:${Versions.room}"
+    const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
+    const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
+
+    fun DependencyHandler.room() = apply {
+        implementation(roomKtx)
+        implementation(room)
+        kapt(roomCompiler)
     }
 }
 

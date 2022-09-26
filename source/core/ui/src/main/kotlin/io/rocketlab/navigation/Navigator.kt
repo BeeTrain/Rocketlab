@@ -2,6 +2,7 @@ package io.rocketlab.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavOptionsBuilder
+import io.rocketlab.navigation.extension.isLifecycleResumed
 import io.rocketlab.navigation.extension.navigate
 
 class Navigator {
@@ -17,6 +18,10 @@ class Navigator {
     }
 
     fun navigate(destination: Destination, builder: NavOptionsBuilder.() -> Unit = {}) {
-        requireNotNull(navController).navigate(destination, builder)
+        requireNotNull(navController).apply {
+            if (currentBackStackEntry?.isLifecycleResumed == true) {
+                navigate(destination, builder)
+            }
+        }
     }
 }

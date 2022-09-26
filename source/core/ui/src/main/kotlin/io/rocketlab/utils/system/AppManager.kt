@@ -11,6 +11,9 @@ class AppManager(
     environment: Environment
 ) {
 
+    val applicationId: String
+        get() = context.packageName
+
     val buildType = environment.buildType.title
 
     val appVersionName: String
