@@ -1,26 +1,27 @@
 package io.rocketlab.screen.note.presentation.list.presentation.view
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.rocketlab.arch.extension.accept
+import io.rocketlab.screen.note.presentation.list.presentation.view.note.NoteCard
+import io.rocketlab.screen.note.presentation.list.presentation.view.note.NoteDivider
 import io.rocketlab.screen.note.presentation.list.presentation.viewmodel.NotesListViewModel
 import io.rocketlab.ui.R
 import io.rocketlab.ui.appbar.AppBar
@@ -32,6 +33,7 @@ fun NotesListScreen(
     viewModel: NotesListViewModel = getViewModel()
 ) {
     val notes by viewModel.notesState.collectAsState()
+    val scrollState = rememberLazyListState()
 
     Scaffold(
         topBar = {
@@ -63,13 +65,15 @@ fun NotesListScreen(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
             ) {
-                LazyColumn {
+                LazyColumn(
+                    state = scrollState
+                ) {
                     itemsIndexed(notes) { index, note ->
-                        Text(
-                            text = "$index: $note",
-                            modifier = Modifier
-                                .clickable { viewModel.openNoteAction.accept(note) }
+                        NoteCard(
+                            note = note,
+                            onClick = { viewModel.openNoteAction.accept(it) }
                         )
+                        NoteDivider(index == notes.lastIndex)
                     }
                 }
             }
