@@ -11,4 +11,8 @@ class NotesListInteractor(
     fun loadNotes(): Flow<List<Note>> {
         return notesListRepository.getNotes()
     }
+
+    suspend fun deleteNote(id: Int) {
+        notesListRepository.deleteNote(id)
+    }
 }

@@ -11,4 +11,8 @@ class NotesListRepository(
     fun getNotes(): Flow<List<Note>> {
         return noteDao.getAllNotes()
     }
+
+    suspend fun deleteNote(id: Int) {
+        noteDao.deleteNoteById(id)
+    }
 }

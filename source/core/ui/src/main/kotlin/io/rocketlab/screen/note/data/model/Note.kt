@@ -9,10 +9,9 @@ data class Note(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
 
-    var text: String = ""
-) {
+    var text: String = "",
 
-    override fun toString(): String {
-        return "Note(text='$text', id=$id)"
-    }
-}
+    var createdOn: Long = System.currentTimeMillis(),
+
+    var updatedOn: Long = System.currentTimeMillis()
+)

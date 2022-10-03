@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.rocketlab.arch.extension.accept
@@ -26,6 +27,7 @@ import io.rocketlab.screen.note.presentation.list.presentation.viewmodel.NotesLi
 import io.rocketlab.ui.R
 import io.rocketlab.ui.appbar.AppBar
 import io.rocketlab.ui.theme.fabShape
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -34,6 +36,7 @@ fun NotesListScreen(
 ) {
     val notes by viewModel.notesState.collectAsState()
     val scrollState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -71,7 +74,12 @@ fun NotesListScreen(
                     itemsIndexed(notes) { index, note ->
                         NoteCard(
                             note = note,
-                            onClick = { viewModel.openNoteAction.accept(it) }
+                            onCardClick = {
+                                viewModel.onNoteClickAction.accept(it)
+                                coroutineScope.launch { scrollState.animateScrollToItem(index) }
+                            },
+                            onEditClick = { viewModel.onNoteEditAction.accept(it) },
+                            onDeleteClick = { viewModel.onNoteDeleteAction.accept(it) }
                         )
                         NoteDivider(index == notes.lastIndex)
                     }
