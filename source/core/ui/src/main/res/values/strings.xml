@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="apply">Apply</string>
     <string name="back">Back</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string name="e_mail_field_title">E-mail</string>
     <string name="e_mail_field_empty_error_text">Enter e-mail</string>
@@ -31,6 +36,7 @@
     <string name="home_screen_empty_state_image_url">https://assets10.lottiefiles.com/private_files/lf30_p5tali1o.json</string>
 
     <string name="notes_screen_title">Notes</string>
+    <string name="notes_screen_delete_dialog_message">Are you sure you want to delete the note?</string>
     <string name="notes_screen_empty_state_image_url">https://assets3.lottiefiles.com/packages/lf20_bd2pqqcm.json</string>
 
     <string name="note_screen_title">Note</string>

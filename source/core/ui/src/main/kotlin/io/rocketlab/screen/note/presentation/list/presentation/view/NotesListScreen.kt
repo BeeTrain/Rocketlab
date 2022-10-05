@@ -21,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import io.rocketlab.arch.extension.accept
+import io.rocketlab.screen.note.presentation.list.presentation.view.dialog.DeleteNoteDialog
 import io.rocketlab.screen.note.presentation.list.presentation.view.note.NoteCard
 import io.rocketlab.screen.note.presentation.list.presentation.view.note.NoteDivider
 import io.rocketlab.screen.note.presentation.list.presentation.viewmodel.NotesListViewModel
@@ -35,8 +36,12 @@ fun NotesListScreen(
     viewModel: NotesListViewModel = getViewModel()
 ) {
     val notes by viewModel.notesState.collectAsState()
+
     val scrollState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+
+    val showDeleteNoteDialog = viewModel.showDeleteNoteDialog.collectAsState()
+
 
     Scaffold(
         topBar = {
@@ -68,6 +73,15 @@ fun NotesListScreen(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
             ) {
+                showDeleteNoteDialog.value?.let { note ->
+                    DeleteNoteDialog(
+                        note = note,
+                        onApply = { viewModel.deleteNoteAction.accept(note) },
+                        onCancel = { viewModel.onDismissDeleteDialogAction.accept() },
+                        onDismiss = { viewModel.onDismissDeleteDialogAction.accept() }
+                    )
+                }
+
                 LazyColumn(
                     state = scrollState
                 ) {
@@ -78,8 +92,8 @@ fun NotesListScreen(
                                 viewModel.onNoteClickAction.accept(it)
                                 coroutineScope.launch { scrollState.animateScrollToItem(index) }
                             },
-                            onEditClick = { viewModel.onNoteEditAction.accept(it) },
-                            onDeleteClick = { viewModel.onNoteDeleteAction.accept(it) }
+                            onEditClick = { viewModel.onNoteEditClickAction.accept(it) },
+                            onDeleteClick = { viewModel.onNoteDeleteClickAction.accept(it) }
                         )
                         NoteDivider(index == notes.lastIndex)
                     }
