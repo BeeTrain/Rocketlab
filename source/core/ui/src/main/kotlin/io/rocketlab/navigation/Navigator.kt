@@ -18,6 +18,10 @@ class Navigator(
         navigationController = navController
     }
 
+    fun <T> parameter(key: String): T? {
+        return savedStateHandle[key]
+    }
+
     fun navigateUp() {
         requireNotNull(navigationController).navigateUp()
     }

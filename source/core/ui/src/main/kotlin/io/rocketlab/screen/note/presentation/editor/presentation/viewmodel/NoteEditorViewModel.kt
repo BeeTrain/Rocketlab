@@ -1,6 +1,5 @@
 package io.rocketlab.screen.note.presentation.editor.presentation.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import io.rocketlab.arch.extension.action
 import io.rocketlab.arch.extension.state
 import io.rocketlab.arch.presentation.viewmodel.BaseViewModel
@@ -13,8 +12,7 @@ import kotlinx.coroutines.flow.update
 
 class NoteEditorViewModel(
     private val interactor: NoteEditorInteractor,
-    private val navigator: Navigator,
-    savedStateHandle: SavedStateHandle
+    private val navigator: Navigator
 ) : BaseViewModel() {
 
     val noteEditorScreenState = state(NoteEditorScreenState())
@@ -25,7 +23,7 @@ class NoteEditorViewModel(
 
     val updateNoteTextAction = action<String> { updateNoteText(it) }
 
-    private val noteId: Int? = savedStateHandle[Destination.NoteEditor.KEY_NOTE_ID]
+    private val noteId = navigator.parameter<Int?>(Destination.NoteEditor.KEY_NOTE_ID)
 
     private var note = Note()
 
