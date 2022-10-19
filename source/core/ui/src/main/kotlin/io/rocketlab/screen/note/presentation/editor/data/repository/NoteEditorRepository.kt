@@ -7,8 +7,11 @@ class NoteEditorRepository(
     private val noteDao: NoteDao
 ) {
 
-    suspend fun getNote(id: Int): Note? {
-        return noteDao.getNoteById(id)
+    suspend fun getNote(id: Int?): Note {
+        return when (id) {
+            null -> getNewNote()
+            else -> noteDao.getNoteById(id) ?: getNewNote()
+        }
     }
 
     suspend fun addNote(note: Note) {
@@ -17,5 +20,9 @@ class NoteEditorRepository(
 
     suspend fun deleteNote(id: Int) {
         noteDao.deleteNoteById(id)
+    }
+
+    private suspend fun getNewNote(): Note {
+        return Note(id = noteDao.getNewNoteId())
     }
 }

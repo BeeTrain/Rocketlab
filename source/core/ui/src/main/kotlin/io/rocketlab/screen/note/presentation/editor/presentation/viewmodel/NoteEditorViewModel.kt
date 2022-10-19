@@ -32,11 +32,9 @@ class NoteEditorViewModel(
     }
 
     private fun loadNote() {
-        noteId?.let { id ->
-            launchJob {
-                note = interactor.loadNote(id) ?: Note()
-                updateNoteText(note.text)
-            }
+        launchJob {
+            note = interactor.loadNote(noteId)
+            updateNoteText(note.text)
         }
     }
 
@@ -54,8 +52,8 @@ class NoteEditorViewModel(
 
     private fun saveNote() {
         launchJob {
-            val text = noteEditorScreenState.value.textField.value
-            interactor.saveNote(Note(id = note.id, text = text))
+            note.text = noteEditorScreenState.value.textField.value
+            interactor.saveNote(note)
             navigator.navigateUp()
         }
     }

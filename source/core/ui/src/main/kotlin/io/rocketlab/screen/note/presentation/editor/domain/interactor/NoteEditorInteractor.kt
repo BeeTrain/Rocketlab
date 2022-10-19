@@ -11,7 +11,7 @@ class NoteEditorInteractor(
         noteEditorRepository.addNote(note)
     }
 
-    suspend fun loadNote(id: Int): Note? {
+    suspend fun loadNote(id: Int?): Note {
         return noteEditorRepository.getNote(id)
     }
 
