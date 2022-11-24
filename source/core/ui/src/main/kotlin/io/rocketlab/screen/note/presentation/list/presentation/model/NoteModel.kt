@@ -1,5 +1,8 @@
 package io.rocketlab.screen.note.presentation.list.presentation.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class NoteModel(
     val id: Int,
     val text: String,
