@@ -1,6 +1,6 @@
 package io.rocketlab.screen.note.presentation.list.presentation.viewmodel.mapper
 
-import io.rocketlab.screen.note.data.model.Note
+import io.rocketlab.storage.database.model.Note
 import io.rocketlab.screen.note.presentation.list.presentation.model.NoteModel
 import io.rocketlab.screen.note.presentation.list.presentation.model.NotesListScreenState
 import io.rocketlab.utils.extension.timeAgo

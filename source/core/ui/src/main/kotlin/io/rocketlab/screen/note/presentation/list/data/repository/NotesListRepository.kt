@@ -1,6 +1,6 @@
 package io.rocketlab.screen.note.presentation.list.data.repository
 
-import io.rocketlab.screen.note.data.model.Note
+import io.rocketlab.storage.database.model.Note
 import io.rocketlab.storage.database.dao.NoteDao
 import kotlinx.coroutines.flow.Flow
 

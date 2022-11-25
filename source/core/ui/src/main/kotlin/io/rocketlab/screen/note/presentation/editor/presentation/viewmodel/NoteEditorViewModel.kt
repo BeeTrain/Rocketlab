@@ -5,7 +5,7 @@ import io.rocketlab.arch.extension.state
 import io.rocketlab.arch.presentation.viewmodel.BaseViewModel
 import io.rocketlab.navigation.Destination
 import io.rocketlab.navigation.Navigator
-import io.rocketlab.screen.note.data.model.Note
+import io.rocketlab.storage.database.model.Note
 import io.rocketlab.screen.note.presentation.editor.domain.interactor.NoteEditorInteractor
 import io.rocketlab.screen.note.presentation.editor.presentation.model.NoteEditorScreenState
 import io.rocketlab.utils.extension.isNotNull

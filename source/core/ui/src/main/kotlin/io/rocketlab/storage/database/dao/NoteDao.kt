@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import io.rocketlab.screen.note.data.model.Note
+import io.rocketlab.storage.database.model.Note
 import kotlinx.coroutines.flow.Flow
 
 @Dao

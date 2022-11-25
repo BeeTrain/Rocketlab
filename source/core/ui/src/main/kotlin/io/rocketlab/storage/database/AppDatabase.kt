@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import io.rocketlab.screen.note.data.model.Note
+import io.rocketlab.storage.database.model.Note
 import io.rocketlab.storage.database.dao.NoteDao
 
 private const val DATABASE_NAME = "app_database"

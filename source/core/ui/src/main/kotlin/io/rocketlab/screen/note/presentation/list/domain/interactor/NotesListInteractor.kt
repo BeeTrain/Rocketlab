@@ -1,6 +1,6 @@
 package io.rocketlab.screen.note.presentation.list.domain.interactor
 
-import io.rocketlab.screen.note.data.model.Note
+import io.rocketlab.storage.database.model.Note
 import io.rocketlab.screen.note.presentation.list.data.repository.NotesListRepository
 import kotlinx.coroutines.flow.Flow
 

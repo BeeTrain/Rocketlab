@@ -1,4 +1,4 @@
-package io.rocketlab.screen.note.data.model
+package io.rocketlab.storage.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
