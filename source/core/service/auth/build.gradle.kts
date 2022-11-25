@@ -1,4 +1,5 @@
-import ComposeDependencies.compose
+import DIDependencies.koin
+import FirebaseDependencies.firebase
 import extension.setupCompose
 
 plugins {
@@ -11,5 +12,6 @@ setupCompose()
 dependencies {
     implementation(projects.utils)
 
-    compose()
+    koin()
+    firebase()
 }

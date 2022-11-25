@@ -2,8 +2,11 @@ package plugin
 
 import AndroidDependencies.core
 import AndroidDependencies.lifecycle
+import AndroidDependencies.navigation
 import ComposeDependencies.compose
+import CoreModules.archModule
 import CoreModules.uiModule
+import CoreModules.utilsModule
 import DIDependencies.koin
 import Plugins
 import extension.setupCompose
@@ -29,8 +32,11 @@ class FeatureModulePlugin : AndroidModulePlugin() {
 
     private fun Project.applyDependencies() {
         dependencies.apply {
+            archModule()
             uiModule()
+            utilsModule()
 
+            navigation()
             core()
             koin()
             lifecycle()

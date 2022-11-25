@@ -1,6 +1,7 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
 import CoreModules.koinModules
+import CoreModules.navigationApiModule
 import internal.compileOnly
 import internal.debugImplementation
 import internal.implementation
@@ -121,9 +122,14 @@ object AndroidDependencies {
         implementation(lifecycleRuntimeKtx)
     }
 
-    fun DependencyHandler.navigation() = apply {
+    fun DependencyHandler.navigationLibraries() = apply {
         implementation(navigation)
         implementation(accompanistNavigation)
+    }
+
+    fun DependencyHandler.navigation() = apply {
+        navigationLibraries()
+        navigationApiModule()
     }
 }
 
@@ -247,6 +253,14 @@ object AnnotationProcessingDependencies {
 
 internal object CoreModules {
 
+    fun DependencyHandler.archModule() = apply {
+        implementation(project(":arch"))
+    }
+
+    fun DependencyHandler.utilsModule() = apply {
+        implementation(project(":utils"))
+    }
+
     fun DependencyHandler.uiModule() = apply {
         implementation(project(":ui"))
     }
@@ -254,5 +268,9 @@ internal object CoreModules {
     fun DependencyHandler.koinModules() = apply {
         implementation(project(":koin-module-annotation"))
         kapt(project(":koin-module-annotation-processor"))
+    }
+
+    fun DependencyHandler.navigationApiModule() = apply {
+        implementation(project(":navigation-api"))
     }
 }

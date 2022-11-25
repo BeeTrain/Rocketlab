@@ -3,7 +3,6 @@ import extension.setupCompose
 
 plugins {
     id(Plugins.androidModule)
-    id(Plugins.kotlinKapt)
 }
 
 setupCompose()
