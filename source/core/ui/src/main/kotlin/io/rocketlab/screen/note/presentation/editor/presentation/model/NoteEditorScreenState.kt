@@ -5,5 +5,7 @@ import io.rocketlab.screen.note.presentation.editor.presentation.view.text.NoteT
 
 @Immutable
 data class NoteEditorScreenState(
-    val textField: NoteTextFieldState = NoteTextFieldState()
+    val textField: NoteTextFieldState = NoteTextFieldState(),
+    val isSavingEnabled: Boolean = false,
+    val isDeletingEnabled: Boolean = false
 )

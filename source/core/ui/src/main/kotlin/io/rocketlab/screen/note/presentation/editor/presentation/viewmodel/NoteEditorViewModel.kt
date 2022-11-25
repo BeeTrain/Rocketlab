@@ -8,6 +8,7 @@ import io.rocketlab.navigation.Navigator
 import io.rocketlab.screen.note.data.model.Note
 import io.rocketlab.screen.note.presentation.editor.domain.interactor.NoteEditorInteractor
 import io.rocketlab.screen.note.presentation.editor.presentation.model.NoteEditorScreenState
+import io.rocketlab.utils.extension.isNotNull
 import kotlinx.coroutines.flow.update
 
 class NoteEditorViewModel(
@@ -15,15 +16,15 @@ class NoteEditorViewModel(
     private val navigator: Navigator
 ) : BaseViewModel() {
 
-    val noteEditorScreenState = state(NoteEditorScreenState())
+    private val noteId = navigator.parameter<Int?>(Destination.NoteEditor.KEY_NOTE_ID)
+
+    val noteEditorScreenState = state(prepareNoteEditorScreenState())
 
     val onBackPressedAction = action<Unit> { onBackPressed() }
     val onCheckClickAction = action<Unit> { saveNote() }
     val onDeleteClickAction = action<Unit> { deleteNote() }
 
     val updateNoteTextAction = action<String> { updateNoteText(it) }
-
-    private val noteId = navigator.parameter<Int?>(Destination.NoteEditor.KEY_NOTE_ID)
 
     private var note = Note()
 
@@ -45,7 +46,8 @@ class NoteEditorViewModel(
     private fun updateNoteText(newValue: String) {
         noteEditorScreenState.update { state ->
             state.copy(
-                textField = state.textField.copy(value = newValue)
+                textField = state.textField.copy(value = newValue),
+                isSavingEnabled = newValue.isNotEmpty()
             )
         }
     }
@@ -63,5 +65,11 @@ class NoteEditorViewModel(
             interactor.deleteNote(note.id)
             navigator.navigateUp()
         }
+    }
+
+    private fun prepareNoteEditorScreenState(): NoteEditorScreenState {
+        return NoteEditorScreenState(
+            isDeletingEnabled = noteId.isNotNull()
+        )
     }
 }

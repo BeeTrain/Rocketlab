@@ -7,6 +7,7 @@ import io.rocketlab.navigation.Destination
 import io.rocketlab.navigation.Navigator
 import io.rocketlab.screen.note.presentation.list.domain.interactor.NotesListInteractor
 import io.rocketlab.screen.note.presentation.list.presentation.model.NoteModel
+import io.rocketlab.screen.note.presentation.list.presentation.model.NotesListScreenState
 import io.rocketlab.screen.note.presentation.list.presentation.viewmodel.mapper.NotesListMapper
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -17,8 +18,7 @@ class NotesListViewModel(
     private val navigator: Navigator
 ) : BaseViewModel() {
 
-    val notesState = state<List<NoteModel>>(emptyList())
-
+    val uiState = state<NotesListScreenState>(NotesListScreenState.Loading)
     val showDeleteNoteDialog = state<NoteModel?>(null)
 
     val onBackPressedAction = action<Unit> { onBackPressed() }
@@ -37,7 +37,7 @@ class NotesListViewModel(
         launchJob {
             interactor.loadNotes()
                 .map { mapper.map(it) }
-                .collect(notesState)
+                .collect(uiState)
         }
     }
 
@@ -50,19 +50,19 @@ class NotesListViewModel(
     }
 
     private fun expandNote(note: NoteModel) {
-        notesState.update { notes ->
-            val mutableNotes = notes.toMutableList()
+        uiState.update { state ->
+            if (state.asContentOrNull() == null) return
+
+            val mutableNotes = state.asContent().notes.toMutableList()
             val noteIndex = mutableNotes.indexOf(note)
 
-
-
-            notes.forEachIndexed { index, note ->
+            mutableNotes.forEachIndexed { index, note ->
                 if (index == noteIndex) {
                     mutableNotes[index] = note.copy(isExpanded = note.isExpanded.not())
                 }
             }
 
-            mutableNotes
+            NotesListScreenState.Content(mutableNotes)
         }
     }
 

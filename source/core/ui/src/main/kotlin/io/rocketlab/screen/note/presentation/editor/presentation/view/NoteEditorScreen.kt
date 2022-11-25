@@ -3,6 +3,7 @@ package io.rocketlab.screen.note.presentation.editor.presentation.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -41,26 +42,7 @@ fun NoteEditorScreen(
             AppBar(
                 title = stringResource(R.string.note_screen_title),
                 onBackPressed = { viewModel.onBackPressedAction.accept() },
-                actions = {
-                    IconButton(
-                        content = {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = null
-                            )
-                        },
-                        onClick = { viewModel.onCheckClickAction.accept() }
-                    )
-                    IconButton(
-                        content = {
-                            Icon(
-                                imageVector = Icons.Filled.Delete,
-                                contentDescription = null
-                            )
-                        },
-                        onClick = { viewModel.onDeleteClickAction.accept() }
-                    )
-                }
+                actions = { ToolbarActions(uiState, viewModel) }
             )
         },
         content = { paddingValues ->
@@ -80,6 +62,35 @@ fun NoteEditorScreen(
             }
         }
     )
+}
+
+@Composable
+private fun RowScope.ToolbarActions(
+    uiState: NoteEditorScreenState,
+    viewModel: NoteEditorViewModel
+) {
+    if (uiState.isSavingEnabled) {
+        IconButton(
+            content = {
+                Icon(
+                    imageVector = Icons.Filled.Check,
+                    contentDescription = null
+                )
+            },
+            onClick = { viewModel.onCheckClickAction.accept() }
+        )
+    }
+    if (uiState.isDeletingEnabled) {
+        IconButton(
+            content = {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = null
+                )
+            },
+            onClick = { viewModel.onDeleteClickAction.accept() }
+        )
+    }
 }
 
 @Composable

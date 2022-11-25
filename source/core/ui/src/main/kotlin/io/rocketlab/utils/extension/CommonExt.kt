@@ -29,3 +29,5 @@ fun <T> T?.ifNull(orValue: T): T {
 fun <T> T?.takeWhen(condition: Boolean): T? {
     return if (condition) this else null
 }
+
+fun Any?.isNotNull() = this != null
