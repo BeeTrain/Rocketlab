@@ -9,7 +9,7 @@ import internal.kapt
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.kotlin.dsl.project
 
-const val kotlinVersion = "1.7.10"
+const val kotlinVersion = "1.7.20"
 
 object Plugins {
 
@@ -61,10 +61,10 @@ object ComposeDependencies {
 
     object Versions {
 
-        const val compiler = "1.3.0"
-        const val functionality = "1.2.1"
-        const val material3 = "1.0.0-beta02"
-        const val accompanist = "0.26.3-beta"
+        const val compiler = "1.3.2"
+        const val functionality = "1.3.1"
+        const val material3 = "1.0.1"
+        const val accompanist = "0.28.0"
     }
 
     const val ui = "androidx.compose.ui:ui:${Versions.functionality}"
@@ -96,11 +96,10 @@ object AndroidDependencies {
 
     object Versions {
 
-        const val core = "1.8.0"
-        const val lifecycle = "2.4.1"
-        const val activityCompose = "1.5.1"
-        const val navigation = "2.5.1"
-        const val accompanist = "0.26.2-beta"
+        const val core = "1.9.0"
+        const val lifecycle = "2.5.1"
+        const val activityCompose = "1.6.1"
+        const val navigation = "2.5.3"
         const val playServicesAuth = "20.2.0"
     }
 
@@ -110,7 +109,7 @@ object AndroidDependencies {
     const val activityCompose = "androidx.activity:activity-compose:${Versions.activityCompose}"
 
     const val navigation = "androidx.navigation:navigation-compose:${Versions.navigation}"
-    const val accompanistNavigation = "com.google.accompanist:accompanist-navigation-material:${Versions.accompanist}"
+    const val accompanistNavigation = "com.google.accompanist:accompanist-navigation-material:${ComposeDependencies.Versions.accompanist}"
 
     const val playServicesAuth = "com.google.android.gms:play-services-auth:${Versions.playServicesAuth}"
 
@@ -137,7 +136,7 @@ object DIDependencies {
 
     object Versions {
 
-        const val koin = "3.2.0"
+        const val koin = "3.2.2"
     }
 
     const val core = "io.insert-koin:koin-core:${Versions.koin}"
@@ -156,7 +155,7 @@ object FirebaseDependencies {
 
     object Versions {
 
-        const val firebase = "30.3.1"
+        const val firebase = "31.1.0"
         const val firebaseUi = "8.0.1"
     }
 
@@ -211,7 +210,7 @@ object MiscDependencies {
 
     object Versions {
 
-        const val coil = "2.2.1"
+        const val coil = "2.2.2"
         const val lottie = "5.2.0"
     }
 

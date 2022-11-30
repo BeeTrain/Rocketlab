@@ -29,8 +29,8 @@ pluginManagement {
 
     resolutionStrategy {
         eachPlugin {
-            val kotlinVersion = "1.7.10"
-            val androidGradleVersion = "7.2.2"
+            val kotlinVersion = "1.7.20"
+            val androidGradleVersion = "7.3.1"
 
             val pluginId = requested.id.id
             when {
