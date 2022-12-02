@@ -5,6 +5,8 @@ import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.project
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.File
 import java.util.Locale
 
@@ -47,3 +49,25 @@ internal val Project.applicationProguardFiles: List<File>
         arrayOf(androidExtension.getDefaultProguardFile("proguard-android-optimize.txt")),
         File("${rootDir.path}/config/signing/proguard").listFiles()
     ).flatten()
+
+internal fun Project.setupComposableMetrics() {
+    rootProject.subprojects {
+        tasks.withType<KotlinCompile>().configureEach {
+            if (project.findProperty("composeCompilerMetricsEnabled") == "true") {
+                println("composeCompilerMetricsEnabled=true, need to build report")
+                kotlinOptions {
+                    freeCompilerArgs = freeCompilerArgs + setOf(
+                        "-P",
+                        "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                            project.buildDir.absolutePath + "/compose_metrics"
+                    )
+                    freeCompilerArgs = freeCompilerArgs + setOf(
+                        "-P",
+                        "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                            project.buildDir.absolutePath + "/compose_metrics"
+                    )
+                }
+            }
+        }
+    }
+}

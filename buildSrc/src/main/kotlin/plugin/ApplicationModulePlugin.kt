@@ -12,6 +12,7 @@ import Plugins
 import internal.applicationExtension
 import internal.applicationProguardFiles
 import internal.configureProjectModules
+import internal.setupComposableMetrics
 import internal.versionCode
 import internal.versionName
 import org.gradle.api.Plugin
@@ -26,6 +27,8 @@ class ApplicationModulePlugin : Plugin<Project> {
             applyPlugins()
             applyApplicationConfig()
             applyDependencies()
+
+            setupComposableMetrics()
         }
     }
 
