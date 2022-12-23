@@ -15,7 +15,8 @@ fun attachBuildModules() {
     println("attach build modules...")
     rootDir.walk()
         .maxDepth(Constants.MAX_DEPTH)
-        .filter { it.isGradleModule && it.isBuildModule }
+        .filter { !it.startsWith(".") && it.name != "build" }
+        .filter { it.isBuildModule }
         .forEach {
             it.attachBuildModule()
             buildModulesCount++
@@ -28,7 +29,8 @@ fun attachProjectModules() {
     println("attach project modules...")
     rootDir.walk()
         .maxDepth(Constants.MAX_DEPTH)
-        .filter { it.isGradleModule && it.isBuildModule.not() }
+        .filter { !it.startsWith(".") && it.name != "build" }
+        .filter { it.isProjectModule }
         .forEach {
             it.attachModule()
             projectModulesCount++
@@ -49,20 +51,31 @@ fun File.attachBuildModule() {
     println("build module \"$moduleName\" attached")
 }
 
-val File.isBuildModule: Boolean
-    get() = name.contains("build") && isBuildSrcModule.not()
-
 val File.isGradleModule: Boolean
     get() {
-        return isBuildSrcModule.not() &&
-            isDirectory &&
+        return isDirectory &&
             absolutePath != rootDir.path &&
+            isBuildSrcModule.not() &&
             isBuildGradleConfigExists
+    }
+
+val File.isProjectModule: Boolean
+    get() {
+        return isGradleModule &&
+            !name.contains("build") &&
+            isBuildSrcModule.not()
+    }
+
+val File.isBuildModule: Boolean
+    get() {
+        return isGradleModule &&
+            name.contains("build") &&
+            isBuildSrcModule.not()
     }
 
 val File.isBuildSrcModule: Boolean
     get() {
-        return name == "buildSrc"  &&
+        return name == "buildSrc" &&
             isDirectory &&
             isBuildGradleConfigExists
     }
