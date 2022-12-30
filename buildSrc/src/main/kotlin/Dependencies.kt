@@ -101,6 +101,7 @@ object AndroidDependencies {
         const val activityCompose = "1.6.1"
         const val navigation = "2.5.3"
         const val playServicesAuth = "20.2.0"
+        const val appStartup = "1.1.1"
     }
 
     const val coreKtx = "androidx.core:core-ktx:${Versions.core}"
@@ -109,9 +110,16 @@ object AndroidDependencies {
     const val activityCompose = "androidx.activity:activity-compose:${Versions.activityCompose}"
 
     const val navigation = "androidx.navigation:navigation-compose:${Versions.navigation}"
-    const val accompanistNavigation = "com.google.accompanist:accompanist-navigation-material:${ComposeDependencies.Versions.accompanist}"
+    const val accompanistNavigation =
+        "com.google.accompanist:accompanist-navigation-material:${ComposeDependencies.Versions.accompanist}"
+
+    const val appStartup = "androidx.startup:startup-runtime:${Versions.appStartup}"
 
     const val playServicesAuth = "com.google.android.gms:play-services-auth:${Versions.playServicesAuth}"
+
+    fun DependencyHandler.appStartup() = apply {
+        implementation(appStartup)
+    }
 
     fun DependencyHandler.core() = apply {
         implementation(coreKtx)

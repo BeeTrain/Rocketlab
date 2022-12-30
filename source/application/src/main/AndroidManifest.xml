@@ -29,6 +29,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            android:name="androidx.startup.InitializationProvider"
+            tools:node="merge">
+
+            <meta-data
+                android:name="io.rocketlab.app.startup.KoinInitializer"
+                android:value="androidx.startup" />
+
+        </provider>
+
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package plugin
 
+import AndroidDependencies.appStartup
 import AndroidDependencies.core
 import AndroidDependencies.lifecycle
 import AppConfig
@@ -38,6 +39,7 @@ class ApplicationModulePlugin : Plugin<Project> {
             apply(plugin = Plugins.kotlinModule)
             apply(plugin = Plugins.kotlinKapt)
             apply(plugin = Plugins.firebaseCrashlytics)
+            apply(plugin = Plugins.googleServices)
         }
     }
 
@@ -116,6 +118,7 @@ class ApplicationModulePlugin : Plugin<Project> {
             compose()
             firebase()
             lifecycle()
+            appStartup()
         }
     }
 }
