@@ -11,6 +11,8 @@ data class Note(
 
     var text: String = "",
 
+    var status: NoteStatus = NoteStatus.TODO,
+
     var createdOn: Long = System.currentTimeMillis(),
 
     var updatedOn: Long = System.currentTimeMillis()

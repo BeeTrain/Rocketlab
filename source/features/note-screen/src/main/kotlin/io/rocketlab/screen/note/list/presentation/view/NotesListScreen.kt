@@ -7,10 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -21,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -32,16 +27,16 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import io.rocketlab.arch.extension.accept
 import io.rocketlab.screen.note.list.presentation.model.NoteModel
 import io.rocketlab.screen.note.list.presentation.model.NotesListScreenState
+import io.rocketlab.screen.note.list.presentation.model.UpdateNoteStatusAction
 import io.rocketlab.screen.note.list.presentation.view.dialog.DeleteNoteDialog
-import io.rocketlab.screen.note.list.presentation.view.note.NoteCard
-import io.rocketlab.screen.note.list.presentation.view.note.NoteDivider
+import io.rocketlab.screen.note.list.presentation.view.note.NotesColumn
 import io.rocketlab.screen.note.list.presentation.viewmodel.NotesListViewModel
+import io.rocketlab.storage.database.model.NoteStatus
 import io.rocketlab.ui.R
 import io.rocketlab.ui.appbar.AppBar
+import io.rocketlab.ui.draganddrop.LongPressDraggableBox
 import io.rocketlab.ui.progress.CircularProgress
 import io.rocketlab.ui.theme.fabShape
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -50,9 +45,6 @@ fun NotesListScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val showDeleteNoteDialog = viewModel.showDeleteNoteDialog.collectAsState()
-
-    val scrollState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -84,16 +76,14 @@ fun NotesListScreen(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
             ) {
-                showDeleteDialogIfNeed(showDeleteNoteDialog, viewModel)
+                DeleteNoteEventDialog(showDeleteNoteDialog, viewModel)
 
                 when (uiState) {
-                    is NotesListScreenState.Content -> renderContent(
+                    is NotesListScreenState.Content -> ContentState(
                         uiState = uiState.asContent(),
-                        viewModel = viewModel,
-                        scrollState = scrollState,
-                        coroutineScope = coroutineScope
+                        viewModel = viewModel
                     )
-                    is NotesListScreenState.Loading -> renderLoading()
+                    is NotesListScreenState.Loading -> LoadingState()
                 }
             }
         }
@@ -101,16 +91,14 @@ fun NotesListScreen(
 }
 
 @Composable
-private fun renderContent(
+private fun ContentState(
     uiState: NotesListScreenState.Content,
-    viewModel: NotesListViewModel,
-    scrollState: LazyListState,
-    coroutineScope: CoroutineScope
+    viewModel: NotesListViewModel
 ) {
     val composition by rememberLottieComposition(
         LottieCompositionSpec.Url(stringResource(R.string.notes_screen_empty_state_image_url))
     )
-    if (uiState.notes.isEmpty()) {
+    if (uiState.todoNotes.isEmpty() && uiState.doneNotes.isEmpty()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -119,27 +107,27 @@ private fun renderContent(
             LottieAnimation(composition)
         }
     } else {
-        LazyColumn(
-            state = scrollState
-        ) {
-            itemsIndexed(uiState.notes) { index, note ->
-                NoteCard(
-                    note = note,
-                    onCardClick = {
-                        viewModel.onNoteClickAction.accept(it)
-                        coroutineScope.launch { scrollState.animateScrollToItem(index) }
-                    },
-                    onEditClick = { viewModel.onNoteEditClickAction.accept(it) },
-                    onDeleteClick = { viewModel.onNoteDeleteClickAction.accept(it) }
-                )
-                NoteDivider(index == uiState.notes.lastIndex)
-            }
+        LongPressDraggableBox {
+            NotesColumn(
+                title = uiState.todoNotes.title,
+                notes = uiState.todoNotes.notes,
+                onNoteDropped = { viewModel.updateNoteStatus.accept(UpdateNoteStatusAction(it, NoteStatus.TODO)) },
+                onNoteClick = { viewModel.onNoteClickAction.accept(it) }
+            )
+            NotesColumn(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd),
+                title = uiState.doneNotes.title,
+                notes = uiState.doneNotes.notes,
+                onNoteDropped = { viewModel.updateNoteStatus.accept(UpdateNoteStatusAction(it, NoteStatus.DONE)) },
+                onNoteClick = { viewModel.onNoteClickAction.accept(it) }
+            )
         }
     }
 }
 
 @Composable
-private fun BoxScope.renderLoading() {
+private fun BoxScope.LoadingState() {
     CircularProgress(
         modifier = Modifier
             .size(56.dp)
@@ -148,7 +136,7 @@ private fun BoxScope.renderLoading() {
 }
 
 @Composable
-private fun showDeleteDialogIfNeed(
+private fun DeleteNoteEventDialog(
     showDeleteNoteDialog: State<NoteModel?>,
     viewModel: NotesListViewModel
 ) {

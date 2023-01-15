@@ -8,13 +8,15 @@ import io.rocketlab.navigation.api.Navigator
 import io.rocketlab.screen.note.list.domain.interactor.NotesListInteractor
 import io.rocketlab.screen.note.list.presentation.model.NoteModel
 import io.rocketlab.screen.note.list.presentation.model.NotesListScreenState
-import io.rocketlab.screen.note.list.presentation.viewmodel.mapper.NotesListMapper
+import io.rocketlab.screen.note.list.presentation.model.UpdateNoteStatusAction
+import io.rocketlab.screen.note.list.presentation.viewmodel.mapper.NotesListContentMapper
+import io.rocketlab.storage.database.model.NoteStatus
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 class NotesListViewModel(
     private val interactor: NotesListInteractor,
-    private val mapper: NotesListMapper,
+    private val mapper: NotesListContentMapper,
     private val navigator: Navigator
 ) : BaseViewModel() {
 
@@ -23,11 +25,12 @@ class NotesListViewModel(
 
     val onBackPressedAction = action<Unit> { onBackPressed() }
     val onAddNoteClickAction = action<Unit> { createNote() }
-    val onNoteClickAction = action<NoteModel> { expandNote(it) }
+    val onNoteClickAction = action<NoteModel> { }
     val onNoteEditClickAction = action<NoteModel> { openNoteEditor(it) }
     val onNoteDeleteClickAction = action<NoteModel> { showDeleteNoteDialog(it) }
     val onDismissDeleteDialogAction = action<Unit> { dismissDeleteDialog() }
     val deleteNoteAction = action<NoteModel> { deleteNote(it) }
+    val updateNoteStatus = action<UpdateNoteStatusAction> { updateNoteStatusIfNeed(it.note, it.status) }
 
     init {
         loadNotes()
@@ -47,23 +50,6 @@ class NotesListViewModel(
 
     private fun createNote() {
         navigator.navigate(Destination.NoteEditor)
-    }
-
-    private fun expandNote(note: NoteModel) {
-        uiState.update { state ->
-            if (state.asContentOrNull() == null) return
-
-            val mutableNotes = state.asContent().notes.toMutableList()
-            val noteIndex = mutableNotes.indexOf(note)
-
-            mutableNotes.forEachIndexed { index, note ->
-                if (index == noteIndex) {
-                    mutableNotes[index] = note.copy(isExpanded = note.isExpanded.not())
-                }
-            }
-
-            NotesListScreenState.Content(mutableNotes)
-        }
     }
 
     private fun showDeleteNoteDialog(note: NoteModel) {
@@ -86,5 +72,13 @@ class NotesListViewModel(
 
     private fun dismissDeleteDialog() {
         showDeleteNoteDialog.update { null }
+    }
+
+    private fun updateNoteStatusIfNeed(note: NoteModel, newStatus: NoteStatus) {
+        if (note.status == newStatus) return
+
+        launchJob {
+            interactor.updateNoteStatus(note.id, newStatus)
+        }
     }
 }

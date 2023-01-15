@@ -4,17 +4,17 @@ import io.rocketlab.storage.database.model.Note
 import io.rocketlab.storage.database.dao.NoteDao
 
 class NoteEditorRepository(
-    private val noteDao: io.rocketlab.storage.database.dao.NoteDao
+    private val noteDao: NoteDao
 ) {
 
-    suspend fun getNote(id: Int?): io.rocketlab.storage.database.model.Note {
+    suspend fun getNote(id: Int?): Note {
         return when (id) {
             null -> getNewNote()
             else -> noteDao.getNoteById(id) ?: getNewNote()
         }
     }
 
-    suspend fun addNote(note: io.rocketlab.storage.database.model.Note) {
+    suspend fun addNote(note: Note) {
         noteDao.insert(note)
     }
 
@@ -22,7 +22,7 @@ class NoteEditorRepository(
         noteDao.deleteNoteById(id)
     }
 
-    private suspend fun getNewNote(): io.rocketlab.storage.database.model.Note {
-        return io.rocketlab.storage.database.model.Note(id = noteDao.getNewNoteId())
+    private suspend fun getNewNote(): Note {
+        return Note(id = noteDao.getNewNoteId())
     }
 }

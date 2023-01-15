@@ -10,7 +10,8 @@ sealed interface NotesListScreenState {
 
     @Immutable
     data class Content(
-        val notes: List<NoteModel> = emptyList()
+        val todoNotes: NoteColumnModel,
+        val doneNotes: NoteColumnModel
     ) : NotesListScreenState
 
     fun asContent() = this as Content

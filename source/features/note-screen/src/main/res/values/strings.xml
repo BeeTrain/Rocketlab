@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="notes_list_todo_column_title">TODO</string>
+    <string name="notes_list_done_column_title">DONE</string>
+
+</resources>
