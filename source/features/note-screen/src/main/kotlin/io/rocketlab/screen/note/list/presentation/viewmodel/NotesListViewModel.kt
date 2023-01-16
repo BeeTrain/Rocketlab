@@ -21,16 +21,20 @@ class NotesListViewModel(
 ) : BaseViewModel() {
 
     val uiState = state<NotesListScreenState>(NotesListScreenState.Loading)
-    val showDeleteNoteDialog = state<NoteModel?>(null)
+    val expandedNoteCardState = state<NoteModel?>(null)
+    val deleteNoteDialogState = state<NoteModel?>(null)
 
     val onBackPressedAction = action<Unit> { onBackPressed() }
     val onAddNoteClickAction = action<Unit> { createNote() }
-    val onNoteClickAction = action<NoteModel> { }
+    val onNoteClickAction = action<NoteModel> { expandNoteCard(it) }
+
     val onNoteEditClickAction = action<NoteModel> { openNoteEditor(it) }
     val onNoteDeleteClickAction = action<NoteModel> { showDeleteNoteDialog(it) }
     val onDismissDeleteDialogAction = action<Unit> { dismissDeleteDialog() }
     val deleteNoteAction = action<NoteModel> { deleteNote(it) }
-    val updateNoteStatus = action<UpdateNoteStatusAction> { updateNoteStatusIfNeed(it.note, it.status) }
+    val updateNoteStatusAction = action<UpdateNoteStatusAction> { updateNoteStatusIfNeed(it.note, it.status) }
+
+    val collapseNoteCardAction = action<Unit> { collapseNoteCard() }
 
     init {
         loadNotes()
@@ -53,7 +57,7 @@ class NotesListViewModel(
     }
 
     private fun showDeleteNoteDialog(note: NoteModel) {
-        showDeleteNoteDialog.update { note }
+        deleteNoteDialogState.update { note }
     }
 
     private fun openNoteEditor(note: NoteModel) {
@@ -61,17 +65,19 @@ class NotesListViewModel(
             Destination.NoteEditor.KEY_NOTE_ID to note.id
         )
         navigator.navigate(Destination.NoteEditor, params)
+        collapseNoteCard()
     }
 
     private fun deleteNote(note: NoteModel) {
         launchJob {
             interactor.deleteNote(note.id)
             dismissDeleteDialog()
+            collapseNoteCard()
         }
     }
 
     private fun dismissDeleteDialog() {
-        showDeleteNoteDialog.update { null }
+        deleteNoteDialogState.update { null }
     }
 
     private fun updateNoteStatusIfNeed(note: NoteModel, newStatus: NoteStatus) {
@@ -80,5 +86,13 @@ class NotesListViewModel(
         launchJob {
             interactor.updateNoteStatus(note.id, newStatus)
         }
+    }
+
+    private fun expandNoteCard(note: NoteModel) {
+        expandedNoteCardState.update { note.copy(isExpanded = true) }
+    }
+
+    private fun collapseNoteCard() {
+        expandedNoteCardState.update { null }
     }
 }

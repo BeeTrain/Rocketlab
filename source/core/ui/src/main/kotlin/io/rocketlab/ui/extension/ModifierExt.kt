@@ -140,3 +140,9 @@ fun Modifier.shakeClickEffect() = composed {
             }
         }
 }
+
+fun Modifier.nonClickable() = clickable(
+    interactionSource = MutableInteractionSource(),
+    indication = null,
+    onClick = {}
+)

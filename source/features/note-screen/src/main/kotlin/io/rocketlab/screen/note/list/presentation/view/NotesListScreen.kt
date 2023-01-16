@@ -30,6 +30,7 @@ import io.rocketlab.screen.note.list.presentation.model.NoteModel
 import io.rocketlab.screen.note.list.presentation.model.NotesListScreenState
 import io.rocketlab.screen.note.list.presentation.model.UpdateNoteStatusAction
 import io.rocketlab.screen.note.list.presentation.view.dialog.DeleteNoteDialog
+import io.rocketlab.screen.note.list.presentation.view.note.ExpandedNoteCard
 import io.rocketlab.screen.note.list.presentation.view.note.NotesColumn
 import io.rocketlab.screen.note.list.presentation.viewmodel.NotesListViewModel
 import io.rocketlab.storage.database.model.NoteStatus
@@ -44,7 +45,8 @@ fun NotesListScreen(
     viewModel: NotesListViewModel = getViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val showDeleteNoteDialog = viewModel.showDeleteNoteDialog.collectAsState()
+    val expandedNoteCardState = viewModel.expandedNoteCardState.collectAsState()
+    val deleteNoteDialogState = viewModel.deleteNoteDialogState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -76,8 +78,6 @@ fun NotesListScreen(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
             ) {
-                DeleteNoteEventDialog(showDeleteNoteDialog, viewModel)
-
                 when (uiState) {
                     is NotesListScreenState.Content -> ContentState(
                         uiState = uiState.asContent(),
@@ -85,8 +85,16 @@ fun NotesListScreen(
                     )
                     is NotesListScreenState.Loading -> LoadingState()
                 }
+
+                DeleteNoteEventDialog(deleteNoteDialogState, viewModel)
             }
         }
+    )
+    ExpandedNoteCard(
+        expandedNoteCardState = expandedNoteCardState,
+        onDismiss = { viewModel.collapseNoteCardAction.accept() },
+        onEdit = { viewModel.onNoteEditClickAction.accept(it) },
+        onDelete = { viewModel.onNoteDeleteClickAction.accept(it) }
     )
 }
 
@@ -111,7 +119,7 @@ private fun ContentState(
             NotesColumn(
                 title = uiState.todoNotes.title,
                 notes = uiState.todoNotes.notes,
-                onNoteDropped = { viewModel.updateNoteStatus.accept(UpdateNoteStatusAction(it, NoteStatus.TODO)) },
+                onNoteDropped = { viewModel.updateNoteStatusAction.accept(UpdateNoteStatusAction(it, NoteStatus.TODO)) },
                 onNoteClick = { viewModel.onNoteClickAction.accept(it) }
             )
             NotesColumn(
@@ -119,7 +127,7 @@ private fun ContentState(
                     .align(Alignment.CenterEnd),
                 title = uiState.doneNotes.title,
                 notes = uiState.doneNotes.notes,
-                onNoteDropped = { viewModel.updateNoteStatus.accept(UpdateNoteStatusAction(it, NoteStatus.DONE)) },
+                onNoteDropped = { viewModel.updateNoteStatusAction.accept(UpdateNoteStatusAction(it, NoteStatus.DONE)) },
                 onNoteClick = { viewModel.onNoteClickAction.accept(it) }
             )
         }
@@ -137,10 +145,10 @@ private fun BoxScope.LoadingState() {
 
 @Composable
 private fun DeleteNoteEventDialog(
-    showDeleteNoteDialog: State<NoteModel?>,
+    deleteNoteDialogState: State<NoteModel?>,
     viewModel: NotesListViewModel
 ) {
-    showDeleteNoteDialog.value?.let { note ->
+    deleteNoteDialogState.value?.let { note ->
         DeleteNoteDialog(
             note = note,
             onApply = { viewModel.deleteNoteAction.accept(note) },
