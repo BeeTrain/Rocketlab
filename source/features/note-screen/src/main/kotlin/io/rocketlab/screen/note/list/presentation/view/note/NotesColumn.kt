@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,9 +55,11 @@ fun NotesColumn(
             item {
                 Text(
                     text = title,
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = Typography.headlineMedium,
                     textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
                         .fillMaxWidth()
                 )
             }
