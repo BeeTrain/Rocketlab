@@ -11,7 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import io.rocketlab.ui.R
+import io.rocketlab.screen.auth.R
+import io.rocketlab.ui.R as uiR
 
 @Composable
 fun GoogleSignButton(
@@ -23,7 +24,7 @@ fun GoogleSignButton(
         modifier = modifier.size(40.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_google),
+            painter = painterResource(id = uiR.drawable.ic_google),
             contentDescription = stringResource(R.string.sign_via_google_button_title),
             modifier = Modifier
                 .fillMaxSize()

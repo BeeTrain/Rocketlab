@@ -25,6 +25,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import io.rocketlab.arch.extension.accept
+import io.rocketlab.screen.note.R
 import io.rocketlab.screen.note.list.presentation.model.NoteModel
 import io.rocketlab.screen.note.list.presentation.model.NotesListScreenState
 import io.rocketlab.screen.note.list.presentation.model.UpdateNoteStatusAction
@@ -32,7 +33,6 @@ import io.rocketlab.screen.note.list.presentation.view.dialog.DeleteNoteDialog
 import io.rocketlab.screen.note.list.presentation.view.note.NotesColumn
 import io.rocketlab.screen.note.list.presentation.viewmodel.NotesListViewModel
 import io.rocketlab.storage.database.model.NoteStatus
-import io.rocketlab.ui.R
 import io.rocketlab.ui.appbar.AppBar
 import io.rocketlab.ui.draganddrop.LongPressDraggableBox
 import io.rocketlab.ui.progress.CircularProgress
@@ -63,7 +63,7 @@ fun NotesListScreen(
                 content = {
                     Icon(
                         imageVector = Icons.Filled.Add,
-                        contentDescription = stringResource(R.string.home_screen_add_note_title),
+                        contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }

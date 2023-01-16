@@ -1,7 +1,7 @@
 package io.rocketlab.screen.auth.presentation.validation
 
+import io.rocketlab.screen.auth.R
 import io.rocketlab.screen.auth.presentation.view.text.password.PasswordFieldState
-import io.rocketlab.ui.R
 import io.rocketlab.utils.provider.resources.ResourcesProvider
 
 class PasswordValidator(

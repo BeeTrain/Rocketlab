@@ -3,10 +3,12 @@ package io.rocketlab.screen.auth.presentation.view.text.password
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import io.rocketlab.ui.R
+import io.rocketlab.screen.auth.R
 
+@Immutable
 data class PasswordFieldState(
     val value: String = "",
     val error: String = "",

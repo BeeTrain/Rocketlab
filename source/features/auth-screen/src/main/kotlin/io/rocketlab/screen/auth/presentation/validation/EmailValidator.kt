@@ -1,7 +1,7 @@
 package io.rocketlab.screen.auth.presentation.validation
 
+import io.rocketlab.screen.auth.R
 import io.rocketlab.screen.auth.presentation.view.text.email.EmailFieldState
-import io.rocketlab.ui.R
 import io.rocketlab.utils.EMPTY
 import io.rocketlab.utils.extension.isEmailValid
 import io.rocketlab.utils.provider.resources.ResourcesProvider

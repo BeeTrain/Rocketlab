@@ -10,8 +10,8 @@ class NoteColumnTitleMapper(
 
     fun map(noteStatus: NoteStatus): String {
         return when (noteStatus) {
-            NoteStatus.TODO -> resourcesProvider.getString(R.string.notes_list_todo_column_title)
-            NoteStatus.DONE -> resourcesProvider.getString(R.string.notes_list_done_column_title)
+            NoteStatus.TODO -> resourcesProvider.getString(R.string.note_screen_todo_column_title)
+            NoteStatus.DONE -> resourcesProvider.getString(R.string.note_screen_done_column_title)
         }
     }
 }

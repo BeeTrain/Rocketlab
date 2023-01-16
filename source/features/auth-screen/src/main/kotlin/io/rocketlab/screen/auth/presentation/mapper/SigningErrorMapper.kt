@@ -1,8 +1,8 @@
 package io.rocketlab.screen.auth.presentation.mapper
 
+import io.rocketlab.screen.auth.R
 import io.rocketlab.service.auth.exception.AuthServerTimeoutException
 import io.rocketlab.service.auth.exception.UserNotFoundException
-import io.rocketlab.ui.R
 import io.rocketlab.utils.provider.resources.ResourcesProvider
 
 class SigningErrorMapper(

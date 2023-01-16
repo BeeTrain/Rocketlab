@@ -10,19 +10,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.res.stringResource
-import io.rocketlab.ui.R
+import io.rocketlab.screen.auth.R
 import io.rocketlab.ui.extension.afterFocusChanged
 import io.rocketlab.ui.text.TextField
 import io.rocketlab.ui.text.TextFieldLabel
 
 @Composable
 fun PasswordField(
+    modifier: Modifier = Modifier,
     label: String = stringResource(R.string.password_field_title),
     passwordState: PasswordFieldState = remember { PasswordFieldState() },
     updateValueAction: (String) -> Unit = {},
     validateValueAction: (FocusState) -> Unit = {},
-    updatePasswordVisibilityAction: () -> Unit = {},
-    modifier: Modifier = Modifier
+    updatePasswordVisibilityAction: () -> Unit = {}
 ) {
     val isPasswordFocused = remember { mutableStateOf(false) }
 
@@ -56,11 +56,11 @@ fun PasswordField(
 
 @Composable
 fun PasswordConfirmField(
+    modifier: Modifier = Modifier,
     passwordState: PasswordFieldState = remember { PasswordFieldState() },
     updateValueAction: (String) -> Unit = {},
     validateValueAction: (FocusState) -> Unit = {},
-    updatePasswordVisibilityAction: () -> Unit = {},
-    modifier: Modifier = Modifier
+    updatePasswordVisibilityAction: () -> Unit = {}
 ) = PasswordField(
     label = stringResource(R.string.password_confirm_field_title),
     passwordState = passwordState,

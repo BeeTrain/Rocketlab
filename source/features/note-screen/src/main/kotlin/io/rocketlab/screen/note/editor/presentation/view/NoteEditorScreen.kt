@@ -3,7 +3,6 @@ package io.rocketlab.screen.note.editor.presentation.view
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,10 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.rocketlab.arch.extension.accept
+import io.rocketlab.screen.note.R
 import io.rocketlab.screen.note.editor.presentation.model.NoteEditorScreenState
 import io.rocketlab.screen.note.editor.presentation.view.text.NoteTextField
 import io.rocketlab.screen.note.editor.presentation.viewmodel.NoteEditorViewModel
-import io.rocketlab.ui.R
 import io.rocketlab.ui.appbar.AppBar
 import io.rocketlab.ui.progress.CircularProgress
 import org.koin.androidx.compose.getViewModel
@@ -53,8 +52,8 @@ fun NoteEditorScreen(
                     .background(MaterialTheme.colorScheme.background)
             ) {
                 when {
-                    isLoading -> renderLoading()
-                    else -> renderContent(
+                    isLoading -> LoadingState()
+                    else -> ContentState(
                         uiState = uiState,
                         viewModel = viewModel
                     )
@@ -65,7 +64,7 @@ fun NoteEditorScreen(
 }
 
 @Composable
-private fun RowScope.ToolbarActions(
+private fun ToolbarActions(
     uiState: NoteEditorScreenState,
     viewModel: NoteEditorViewModel
 ) {
@@ -94,7 +93,7 @@ private fun RowScope.ToolbarActions(
 }
 
 @Composable
-private fun BoxScope.renderLoading() {
+private fun BoxScope.LoadingState() {
     CircularProgress(
         modifier = Modifier
             .size(56.dp)
@@ -103,7 +102,7 @@ private fun BoxScope.renderLoading() {
 }
 
 @Composable
-private fun BoxScope.renderContent(
+private fun ContentState(
     uiState: NoteEditorScreenState,
     viewModel: NoteEditorViewModel
 ) {

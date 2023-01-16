@@ -10,17 +10,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import io.rocketlab.ui.R
+import io.rocketlab.screen.auth.R
 import io.rocketlab.ui.extension.afterFocusChanged
 import io.rocketlab.ui.text.TextField
 import io.rocketlab.ui.text.TextFieldLabel
 
 @Composable
 fun EmailField(
+    modifier: Modifier = Modifier,
     emailState: EmailFieldState = remember { EmailFieldState() },
     updateValueAction: (String) -> Unit = {},
-    validateValueAction: (FocusState) -> Unit = {},
-    modifier: Modifier = Modifier
+    validateValueAction: (FocusState) -> Unit = {}
 ) {
     val isEmailFocused = remember { mutableStateOf(false) }
 

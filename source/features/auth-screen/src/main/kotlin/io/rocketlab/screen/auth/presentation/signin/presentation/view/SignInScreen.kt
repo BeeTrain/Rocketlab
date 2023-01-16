@@ -24,9 +24,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -36,6 +36,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import io.rocketlab.arch.extension.accept
 import io.rocketlab.arch.extension.collectAsCommand
+import io.rocketlab.screen.auth.R
 import io.rocketlab.screen.auth.presentation.signin.presentation.model.SignInErrorState
 import io.rocketlab.screen.auth.presentation.signin.presentation.model.SignInScreenState
 import io.rocketlab.screen.auth.presentation.signin.presentation.viewmodel.SignInViewModel
@@ -43,12 +44,9 @@ import io.rocketlab.screen.auth.presentation.view.branding.Branding
 import io.rocketlab.screen.auth.presentation.view.button.GoogleSignButton
 import io.rocketlab.screen.auth.presentation.view.text.email.EmailField
 import io.rocketlab.screen.auth.presentation.view.text.password.PasswordField
-import io.rocketlab.ui.R
 import io.rocketlab.ui.extension.hideKeyboardOnClick
 import io.rocketlab.ui.extension.supportWideScreen
 import io.rocketlab.ui.progress.CircularProgress
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -79,22 +77,23 @@ fun SignInScreen(
         scaffoldState = scaffoldState,
         modifier = Modifier
             .supportWideScreen()
-    ) {
+    ) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(paddingValues)
                 .hideKeyboardOnClick(LocalFocusManager.current)
                 .background(MaterialTheme.colorScheme.background)
         ) {
             when (uiState) {
-                is SignInScreenState.Content -> renderContent(
+                is SignInScreenState.Content -> ContentState(
                     uiState = uiState.asContent(),
                     viewModel = viewModel
                 )
-                is SignInScreenState.Loading -> renderLoading()
+                is SignInScreenState.Loading -> LoadingState()
             }
             if (errorState.message.isNotEmpty()) {
-                renderError(scaffoldState, errorState)
+                ErrorState(scaffoldState, errorState)
                 viewModel.onErrorShowedAction.accept()
             }
         }
@@ -102,7 +101,7 @@ fun SignInScreen(
 }
 
 @Composable
-private fun BoxScope.renderLoading() {
+private fun BoxScope.LoadingState() {
     CircularProgress(
         modifier = Modifier
             .size(56.dp)
@@ -111,7 +110,7 @@ private fun BoxScope.renderLoading() {
 }
 
 @Composable
-private fun BoxScope.renderContent(
+private fun BoxScope.ContentState(
     uiState: SignInScreenState.Content,
     viewModel: SignInViewModel
 ) {
@@ -160,12 +159,11 @@ private fun BoxScope.renderContent(
 }
 
 @Composable
-private fun renderError(
+private fun ErrorState(
     scaffoldState: ScaffoldState,
-    error: SignInErrorState,
-    coroutineScope: CoroutineScope = rememberCoroutineScope()
+    error: SignInErrorState
 ) {
-    coroutineScope.launch {
+    LaunchedEffect(error) {
         scaffoldState.snackbarHostState.showSnackbar(
             message = error.message
         )
