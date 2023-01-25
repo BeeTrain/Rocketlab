@@ -9,7 +9,7 @@ import internal.kapt
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.kotlin.dsl.project
 
-const val kotlinVersion = "1.7.20"
+const val kotlinVersion = "1.8.0"
 
 object Plugins {
 
@@ -61,7 +61,7 @@ object ComposeDependencies {
 
     object Versions {
 
-        const val compiler = "1.3.2"
+        const val compiler = "1.4.0"
         const val functionality = "1.3.1"
         const val material3 = "1.0.1"
         const val accompanist = "0.28.0"
@@ -163,7 +163,7 @@ object FirebaseDependencies {
 
     object Versions {
 
-        const val firebase = "31.1.0"
+        const val firebase = "31.2.0"
         const val firebaseUi = "8.0.1"
     }
 
@@ -200,7 +200,7 @@ object DatabaseDependencies {
 
     object Versions {
 
-        const val room = "2.4.3"
+        const val room = "2.5.0"
     }
 
     const val room = "androidx.room:room-runtime:${Versions.room}"
