@@ -61,7 +61,9 @@ fun Modifier.supportWideScreen(): Modifier {
 
 private enum class ButtonState { PRESSED, IDLE }
 
-fun Modifier.bounceClick() = composed {
+fun Modifier.bounceClick(
+    onClick: (() -> Unit)? = null
+) = composed {
     var buttonState by remember { mutableStateOf(ButtonState.IDLE) }
     val scale by animateFloatAsState(if (buttonState == ButtonState.PRESSED) 0.70f else 1f)
 
@@ -72,7 +74,7 @@ fun Modifier.bounceClick() = composed {
         .clickable(
             interactionSource = remember { MutableInteractionSource() },
             indication = null,
-            onClick = { }
+            onClick = { onClick?.invoke() }
         )
         .pointerInput(buttonState) {
             awaitPointerEventScope {

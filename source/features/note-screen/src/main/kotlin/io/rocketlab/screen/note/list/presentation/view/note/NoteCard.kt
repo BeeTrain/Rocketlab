@@ -15,7 +15,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -31,9 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.rocketlab.screen.note.list.presentation.model.NoteModel
 import io.rocketlab.ui.extension.bounceClick
-import io.rocketlab.ui.extension.noElevation
 import io.rocketlab.ui.shape.WavedShape
-import io.rocketlab.ui.theme.fabShape
 
 @Composable
 fun NoteCard(
@@ -70,13 +66,15 @@ fun ExpandedNoteCard(
         ) {
             Dialog(onDismissRequest = { onDismiss.invoke(note) }) {
                 Card(
-                    shape = RectangleShape,
+                    shape = WavedShape(10),
                     modifier = Modifier
                         .size(cardWidth, cardHeight)
                         .align(Alignment.Center)
                 ) {
                     NoteText(note, isExpanded = true)
-                    Row {
+                    Row(
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    ) {
                         NoteMenu(note, onEdit, onDelete)
                         NoteDate(
                             note = note,
@@ -132,40 +130,22 @@ fun NoteMenu(
         modifier = Modifier
             .padding(8.dp)
     ) {
-        FloatingActionButton(
+        Icon(
             modifier = Modifier
-                .size(40.dp)
-                .bounceClick(),
-            elevation = noElevation(),
-            shape = fabShape,
-            containerColor = MaterialTheme.colorScheme.primary,
-            onClick = { onEdit.invoke(note) },
-            content = {
-                Icon(
-                    modifier = Modifier.size(20.dp),
-                    imageVector = Icons.Filled.Edit,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
+                .size(20.dp)
+                .bounceClick { onEdit.invoke(note) },
+            imageVector = Icons.Filled.Edit,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.width(4.dp))
-        FloatingActionButton(
+        Icon(
             modifier = Modifier
-                .size(40.dp)
-                .bounceClick(),
-            elevation = noElevation(),
-            shape = fabShape,
-            containerColor = MaterialTheme.colorScheme.primary,
-            onClick = { onDelete.invoke(note) },
-            content = {
-                Icon(
-                    modifier = Modifier.size(20.dp),
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
+                .size(20.dp)
+                .bounceClick { onDelete.invoke(note) },
+            imageVector = Icons.Filled.Delete,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onBackground
         )
     }
 }
