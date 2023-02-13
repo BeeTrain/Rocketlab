@@ -1,4 +1,4 @@
-package io.rocketlab.service.di
+package io.rocketlab.service.auth.di
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
