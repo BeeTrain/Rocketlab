@@ -20,8 +20,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import io.rocketlab.arch.extension.accept
 import io.rocketlab.screen.home.R
+import io.rocketlab.screen.home.presentation.view.appbar.HomeAppBar
 import io.rocketlab.screen.home.presentation.viewmodel.HomeScreenViewModel
-import io.rocketlab.ui.appbar.AppBar
 import io.rocketlab.ui.theme.fabShape
 import org.koin.androidx.compose.getViewModel
 
@@ -33,7 +33,9 @@ fun HomeScreen(
         LottieCompositionSpec.Url(stringResource(R.string.home_screen_empty_state_image_url))
     )
     Scaffold(
-        topBar = { AppBar(title = stringResource(id = R.string.home_screen_title)) },
+        topBar = {
+            HomeAppBar()
+        },
         modifier = Modifier
             .navigationBarsPadding(),
         content = { paddingValues ->

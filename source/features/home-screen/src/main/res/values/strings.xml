@@ -6,4 +6,6 @@
     <string name="home_screen_add_note_title">add note</string>
     <string name="home_screen_empty_state_image_url">https://assets10.lottiefiles.com/private_files/lf30_p5tali1o.json</string>
 
+    <string name="home_screen_profile_title">Profile</string>
+
 </resources>
