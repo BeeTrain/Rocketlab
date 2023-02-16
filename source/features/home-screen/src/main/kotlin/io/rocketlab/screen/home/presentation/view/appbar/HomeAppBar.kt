@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ChevronRight
@@ -19,14 +20,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import io.rocketlab.screen.home.R
+import coil.compose.AsyncImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeAppBar(
     modifier: Modifier = Modifier,
+    userName: String,
+    userPhotoUrl: String? = null,
     onClick: () -> Unit
 ) {
     Row(
@@ -44,16 +47,13 @@ fun HomeAppBar(
             onClick = onClick
         ) {
             Row {
-                Icon(
-                    modifier = Modifier
-                        .size(36.dp),
-                    imageVector = Icons.Filled.AccountCircle,
-                    tint = MaterialTheme.colorScheme.onBackground,
-                    contentDescription = null
+                UserImage(
+                    modifier = Modifier.size(36.dp),
+                    userPhotoUrl = userPhotoUrl
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = stringResource(id = R.string.home_screen_profile_title),
+                    text = userName,
                     style = MaterialTheme.typography.headlineMedium,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -67,5 +67,26 @@ fun HomeAppBar(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun UserImage(
+    modifier: Modifier = Modifier,
+    userPhotoUrl: String?
+) {
+    if (userPhotoUrl != null) {
+        AsyncImage(
+            modifier = modifier.clip(CircleShape),
+            model = userPhotoUrl,
+            contentDescription = null
+        )
+    } else {
+        Icon(
+            modifier = modifier,
+            imageVector = Icons.Filled.AccountCircle,
+            tint = MaterialTheme.colorScheme.onBackground,
+            contentDescription = null
+        )
     }
 }

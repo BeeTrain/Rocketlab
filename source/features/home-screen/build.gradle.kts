@@ -1,3 +1,4 @@
+import MiscDependencies.coil
 import MiscDependencies.lottie
 
 plugins {
@@ -8,5 +9,6 @@ plugins {
 dependencies {
     implementation(projects.auth)
 
+    coil()
     lottie()
 }

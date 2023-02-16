@@ -12,6 +12,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -29,12 +30,17 @@ import org.koin.androidx.compose.getViewModel
 fun HomeScreen(
     viewModel: HomeScreenViewModel = getViewModel(),
 ) {
+    val screenState by viewModel.screenState.collectAsState()
     val composition by rememberLottieComposition(
         LottieCompositionSpec.Url(stringResource(R.string.home_screen_empty_state_image_url))
     )
     Scaffold(
         topBar = {
-            HomeAppBar { viewModel.onProfileHeaderClickAction.accept() }
+            HomeAppBar(
+                userName = screenState.userName,
+                userPhotoUrl = screenState.userPhotoUrl,
+                onClick = { viewModel.onProfileHeaderClickAction.accept() }
+            )
         },
         modifier = Modifier
             .navigationBarsPadding(),

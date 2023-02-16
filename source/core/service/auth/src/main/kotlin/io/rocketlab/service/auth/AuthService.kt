@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import io.rocketlab.service.auth.impl.DebugAuthService
 import io.rocketlab.service.auth.impl.ProdAuthService
 import io.rocketlab.service.auth.model.Credentials
+import io.rocketlab.service.auth.model.User
 import io.rocketlab.utils.system.config.Environment
 
 interface AuthService {
@@ -29,6 +30,8 @@ interface AuthService {
             }
         }
     }
+
+    val user: User?
 
     val isLogged: Boolean
 

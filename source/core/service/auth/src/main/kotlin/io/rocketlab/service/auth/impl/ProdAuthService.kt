@@ -12,6 +12,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import io.rocketlab.service.auth.AuthService
 import io.rocketlab.service.auth.exception.AuthServerTimeoutException
 import io.rocketlab.service.auth.model.Credentials
+import io.rocketlab.service.auth.model.User
 import io.rocketlab.utils.extension.catchError
 import java.util.Timer
 import java.util.concurrent.TimeUnit
@@ -26,6 +27,15 @@ class ProdAuthService(
 
     private val firebaseUser: FirebaseUser?
         get() = firebaseAuth.currentUser
+
+    override val user: User?
+        get() = firebaseUser?.let {
+            User(
+                name = it.displayName.orEmpty(),
+                eMail = it.email.orEmpty(),
+                photoUrl = it.photoUrl?.toString()
+            )
+        }
 
     override val isLogged: Boolean
         get() = firebaseUser != null
