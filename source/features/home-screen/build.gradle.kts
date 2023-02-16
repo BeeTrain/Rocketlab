@@ -6,5 +6,7 @@ plugins {
 }
 
 dependencies {
+    implementation(projects.auth)
+
     lottie()
 }

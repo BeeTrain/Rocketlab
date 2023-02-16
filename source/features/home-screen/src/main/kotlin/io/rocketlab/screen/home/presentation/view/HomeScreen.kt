@@ -34,7 +34,7 @@ fun HomeScreen(
     )
     Scaffold(
         topBar = {
-            HomeAppBar()
+            HomeAppBar { viewModel.onProfileHeaderClickAction.accept() }
         },
         modifier = Modifier
             .navigationBarsPadding(),

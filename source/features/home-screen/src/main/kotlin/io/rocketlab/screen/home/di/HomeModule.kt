@@ -8,5 +8,5 @@ import org.koin.dsl.module
 @KoinModule
 val homeModule = module {
 
-    viewModel { HomeScreenViewModel(get()) }
+    viewModel { HomeScreenViewModel(get(), get()) }
 }
