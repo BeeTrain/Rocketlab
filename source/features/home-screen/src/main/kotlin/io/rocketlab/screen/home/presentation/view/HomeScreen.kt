@@ -6,10 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notes
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,9 +17,10 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import io.rocketlab.arch.extension.accept
 import io.rocketlab.screen.home.R
+import io.rocketlab.screen.home.presentation.model.HomeListItem
 import io.rocketlab.screen.home.presentation.view.appbar.HomeAppBar
+import io.rocketlab.screen.home.presentation.view.list.HomeList
 import io.rocketlab.screen.home.presentation.viewmodel.HomeScreenViewModel
-import io.rocketlab.ui.theme.fabShape
 import org.koin.androidx.compose.getViewModel
 
 @Composable
@@ -31,9 +28,7 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = getViewModel(),
 ) {
     val screenState by viewModel.screenState.collectAsState()
-    val composition by rememberLottieComposition(
-        LottieCompositionSpec.Url(stringResource(R.string.home_screen_empty_state_image_url))
-    )
+
     Scaffold(
         topBar = {
             HomeAppBar(
@@ -49,24 +44,33 @@ fun HomeScreen(
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background)
-            ) {
-                LottieAnimation(composition)
-            }
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                shape = fabShape,
-                containerColor = MaterialTheme.colorScheme.primary,
-                onClick = { viewModel.onNotesClickedAction.accept() },
+                    .background(MaterialTheme.colorScheme.background),
                 content = {
-                    Icon(
-                        imageVector = Icons.Filled.Notes,
-                        contentDescription = stringResource(R.string.home_screen_notes_title),
-                        tint = MaterialTheme.colorScheme.onPrimary
+                    ContentState(
+                        viewModel = viewModel,
+                        homeListItems = screenState.listItems
                     )
                 }
             )
         }
     )
+}
+
+@Composable
+private fun ContentState(
+    viewModel: HomeScreenViewModel,
+    homeListItems: List<HomeListItem>
+) {
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.Url(stringResource(R.string.home_screen_empty_state_image_url))
+    )
+
+    if (homeListItems.isEmpty()) {
+        LottieAnimation(composition)
+    } else {
+        HomeList(
+            listItems = homeListItems,
+            onItemClick = { viewModel.onFeatureClickedAction.accept(it) }
+        )
+    }
 }

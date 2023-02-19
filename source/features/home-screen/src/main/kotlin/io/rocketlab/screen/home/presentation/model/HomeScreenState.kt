@@ -5,5 +5,6 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class HomeScreenState(
     val userName: String,
-    val userPhotoUrl: String?
+    val userPhotoUrl: String?,
+    val listItems: List<HomeListItem>
 )
