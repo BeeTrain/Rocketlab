@@ -6,6 +6,10 @@ plugins {
     id(Plugins.kotlinKapt)
 }
 
+android {
+    namespace = "io.rocketlab.storage"
+}
+
 dependencies {
     koin()
     room()

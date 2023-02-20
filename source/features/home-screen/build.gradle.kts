@@ -6,6 +6,10 @@ plugins {
     id(Plugins.kotlinKapt)
 }
 
+android {
+    namespace = "io.rocketlab.screen.home"
+}
+
 dependencies {
     implementation(projects.auth)
 

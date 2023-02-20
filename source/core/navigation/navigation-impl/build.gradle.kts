@@ -9,6 +9,10 @@ plugins {
     id(Plugins.kotlinKapt)
 }
 
+android {
+    namespace = "io.rocketlab.navigation"
+}
+
 setupCompose()
 
 dependencies {

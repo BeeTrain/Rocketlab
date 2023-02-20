@@ -5,6 +5,10 @@ plugins {
     id(Plugins.kotlinKapt)
 }
 
+android {
+    namespace = "io.rocketlab.screen.note"
+}
+
 dependencies {
     implementation(projects.storage)
 

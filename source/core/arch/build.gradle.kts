@@ -5,6 +5,10 @@ plugins {
     id(Plugins.androidModule)
 }
 
+android {
+    namespace = "io.rocketlab.arch"
+}
+
 setupCompose()
 
 dependencies {

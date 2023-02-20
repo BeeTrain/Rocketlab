@@ -5,6 +5,10 @@ plugins {
     id(Plugins.kotlinKapt)
 }
 
+android {
+    namespace = "io.rocketlab.navigation.api"
+}
+
 dependencies {
     navigationLibraries()
 }

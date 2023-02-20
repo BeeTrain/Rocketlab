@@ -7,6 +7,10 @@ plugins {
     id(Plugins.kotlinKapt)
 }
 
+android {
+    namespace = "io.rocketlab.service.auth"
+}
+
 setupCompose()
 
 dependencies {
