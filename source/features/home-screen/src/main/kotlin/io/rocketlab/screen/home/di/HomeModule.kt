@@ -6,6 +6,7 @@ import io.rocketlab.screen.home.domain.interactor.FeaturesInteractor
 import io.rocketlab.screen.home.presentation.viewmodel.HomeScreenViewModel
 import io.rocketlab.screen.home.presentation.viewmodel.mapper.FeaturesMapper
 import io.rocketlab.screen.home.presentation.viewmodel.mapper.ScreenStateMapper
+import io.rocketlab.screen.home.presentation.viewmodel.navigator.HomeScreenNavigator
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -13,6 +14,8 @@ import org.koin.dsl.module
 val homeModule = module {
 
     viewModel { HomeScreenViewModel(get(), get(), get(), get()) }
+
+    factory { HomeScreenNavigator(get()) }
 
     factory { ScreenStateMapper(get(), get()) }
 

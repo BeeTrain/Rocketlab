@@ -19,4 +19,6 @@ sealed class Destination {
 
         const val KEY_NOTE_ID = "NOTE_ID"
     }
+
+    object HeroSquad : Destination()
 }

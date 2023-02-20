@@ -21,6 +21,7 @@ class FeaturesMapper(
     private fun mapTitle(feature: Feature): String {
         val titleRes = when (feature) {
             Feature.NOTES -> R.string.home_screen_notes_title
+            Feature.HERO_SQUAD -> R.string.home_screen_hero_squad_title
         }
 
         return resourcesProvider.getString(titleRes)

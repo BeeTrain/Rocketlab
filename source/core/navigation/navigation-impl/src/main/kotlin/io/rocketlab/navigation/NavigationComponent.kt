@@ -11,6 +11,7 @@ import io.rocketlab.navigation.extension.NavHost
 import io.rocketlab.navigation.extension.composable
 import io.rocketlab.screen.auth.presentation.signin.presentation.view.SignInScreen
 import io.rocketlab.screen.auth.presentation.signup.presentation.view.SignUpScreen
+import io.rocketlab.screen.herosquad.presentation.view.HeroSquadScreen
 import io.rocketlab.screen.home.presentation.view.HomeScreen
 import io.rocketlab.screen.note.editor.presentation.view.NoteEditorScreen
 import io.rocketlab.screen.note.list.presentation.view.NotesListScreen
@@ -48,6 +49,9 @@ fun NavigationComponent(
             }
             composable(Destination.NoteEditor) {
                 NoteEditorScreen()
+            }
+            composable(Destination.HeroSquad) {
+                HeroSquadScreen()
             }
         }
     }
