@@ -5,6 +5,7 @@ import io.rocketlab.utils.provider.activity.ActivityContextProvider
 import io.rocketlab.utils.provider.activity.ActivityLifecycler
 import io.rocketlab.utils.provider.resources.ResourcesProvider
 import io.rocketlab.utils.system.AppManager
+import io.rocketlab.utils.system.AppWindowManager
 import io.rocketlab.utils.system.DeviceManager
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
@@ -20,4 +21,5 @@ val utilsModule = module {
 
     single { AppManager(androidContext(), get()) }
     single { DeviceManager(get()) }
+    single { AppWindowManager(get()) }
 }

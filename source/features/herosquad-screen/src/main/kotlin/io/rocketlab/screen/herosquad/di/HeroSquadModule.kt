@@ -8,5 +8,5 @@ import org.koin.dsl.module
 @KoinModule
 val heroSquadModule = module {
 
-    viewModel { HeroSquadViewModel(get()) }
+    viewModel { HeroSquadViewModel(get(), get()) }
 }
