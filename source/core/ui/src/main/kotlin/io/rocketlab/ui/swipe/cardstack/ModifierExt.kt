@@ -106,10 +106,16 @@ fun Modifier.shadowHorizontalPadding(
     )
 }
 
-fun <E> List<E>.fistToLast(): List<E> {
+fun <E> List<E>.topToBottom(): List<E> {
     return toMutableList().apply {
         val item = last()
         removeLast()
         add(0, item)
+    }
+}
+
+fun <E> List<E>.removeTop(): List<E> {
+    return toMutableList().apply {
+        removeLast()
     }
 }

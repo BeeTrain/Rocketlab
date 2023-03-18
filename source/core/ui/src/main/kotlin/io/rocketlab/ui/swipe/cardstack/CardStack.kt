@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -25,19 +24,28 @@ fun <T> SwipeCardStack(
     onSwipe: (Swipe<T>) -> Unit = {},
     orientation: Orientation = Orientation.Horizontal,
     stackSide: StackGravity = StackGravity.BOTTOM,
+    isInfinite: Boolean = true,
     content: @Composable (item: T) -> Unit
 ) {
     val itemsState = remember { mutableStateOf(items) }
-    val currentIndex by remember { mutableStateOf(itemsState.value.size - 1) }
+    val currentIndex = remember { mutableStateOf(itemsState.value.size - 1) }
     val cardStackController = rememberCardStackController()
 
     cardStackController.onSwipe = { swipeType ->
-        itemsState.update { it.fistToLast() }
+        val swiped = itemsState.value[currentIndex.value]
+        itemsState.update {
+            if (isInfinite) {
+                it.topToBottom()
+            } else {
+                it.removeTop()
+            }
+        }
+        currentIndex.update { itemsState.value.size - 1 }
         when (swipeType) {
-            SwipeSide.TOP -> onSwipe(Swipe(itemsState.value[currentIndex], SwipeSide.TOP))
-            SwipeSide.LEFT -> onSwipe(Swipe(itemsState.value[currentIndex], SwipeSide.LEFT))
-            SwipeSide.RIGHT -> onSwipe(Swipe(itemsState.value[currentIndex], SwipeSide.RIGHT))
-            SwipeSide.BOTTOM -> onSwipe(Swipe(itemsState.value[currentIndex], SwipeSide.BOTTOM))
+            SwipeSide.TOP -> onSwipe(Swipe(swiped, SwipeSide.TOP))
+            SwipeSide.LEFT -> onSwipe(Swipe(swiped, SwipeSide.LEFT))
+            SwipeSide.RIGHT -> onSwipe(Swipe(swiped, SwipeSide.RIGHT))
+            SwipeSide.BOTTOM -> onSwipe(Swipe(swiped, SwipeSide.BOTTOM))
         }
     }
 
@@ -52,13 +60,9 @@ fun <T> SwipeCardStack(
                     .align(Alignment.Center)
                     .shadow(0.dp, RoundedCornerShape(8.dp)),
                 content = {
-                    content(
-                        if (currentIndex < 2) {
-                            itemsState.value[items.size + currentIndex - 2]
-                        } else {
-                            itemsState.value[abs(currentIndex - 2)]
-                        }
-                    )
+                    if (itemsState.value.size > 2) {
+                        content(itemsState.value[abs(currentIndex.value - 2)])
+                    }
                 }
             )
             Box(
@@ -67,7 +71,11 @@ fun <T> SwipeCardStack(
                     .shadowHorizontalPadding(16.dp, cardStackController, 0f)
                     .align(Alignment.Center)
                     .shadow(0.dp, RoundedCornerShape(8.dp)),
-                content = { content(itemsState.value[abs(currentIndex - 1)]) }
+                content = {
+                    if (itemsState.value.size > 1) {
+                        content(itemsState.value[abs(currentIndex.value - 1)])
+                    }
+                }
             )
             Box(
                 modifier = Modifier
@@ -77,7 +85,7 @@ fun <T> SwipeCardStack(
                     .moveTo(cardStackController, orientation)
                     .graphicsLayer(rotationZ = cardStackController.rotation.value)
                     .shadow(0.dp, RoundedCornerShape(8.dp)),
-                content = { content(itemsState.value[currentIndex]) }
+                content = { content(itemsState.value[currentIndex.value]) }
             )
         }
     }
