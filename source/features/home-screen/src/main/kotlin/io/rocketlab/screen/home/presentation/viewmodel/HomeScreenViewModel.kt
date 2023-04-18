@@ -17,15 +17,17 @@ class HomeScreenViewModel(
     private val navigator: HomeScreenNavigator
 ) : BaseViewModel() {
 
-    val onProfileHeaderClickAction = action<Unit> { openAuth() }
+    val onProfileHeaderClickAction = action<Unit> { onHeaderClick() }
     val onFeatureClickedAction = action<Feature> { navigator.openFeature(it) }
 
     val screenState = state(prepareState())
 
-    private fun openAuth() {
-        if (authService.isLogged) return
-
-        navigator.openAuth()
+    private fun onHeaderClick() {
+        if (authService.isLogged) {
+            navigator.openProfile()
+        } else {
+            navigator.openAuth()
+        }
     }
 
     private fun prepareState(): HomeScreenState {

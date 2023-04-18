@@ -12,6 +12,10 @@ class HomeScreenNavigator(
         navigator.navigate(Destination.SignIn)
     }
 
+    fun openProfile() {
+        navigator.navigate(Destination.Profile)
+    }
+
     fun openFeature(feature: Feature) {
         val destination = when (feature) {
             Feature.NOTES -> Destination.NotesList

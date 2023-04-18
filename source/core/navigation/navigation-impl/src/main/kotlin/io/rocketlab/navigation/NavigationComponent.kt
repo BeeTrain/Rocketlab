@@ -15,6 +15,7 @@ import io.rocketlab.screen.herosquad.presentation.view.HeroSquadScreen
 import io.rocketlab.screen.home.presentation.view.HomeScreen
 import io.rocketlab.screen.note.editor.presentation.view.NoteEditorScreen
 import io.rocketlab.screen.note.list.presentation.view.NotesListScreen
+import io.rocketlab.screen.profile.presentation.view.ProfileScreen
 import io.rocketlab.screen.splash.presentation.view.SplashScreen
 import org.koin.androidx.compose.get
 
@@ -43,6 +44,9 @@ fun NavigationComponent(
             }
             composable(Destination.Home) {
                 HomeScreen()
+            }
+            composable(Destination.Profile) {
+                ProfileScreen()
             }
             composable(Destination.NotesList) {
                 NotesListScreen()

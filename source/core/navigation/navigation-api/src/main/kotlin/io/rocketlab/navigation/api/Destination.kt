@@ -13,6 +13,8 @@ sealed class Destination {
 
     object Home : Destination()
 
+    object Profile : Destination()
+
     object NotesList : Destination()
 
     object NoteEditor : Destination() {
