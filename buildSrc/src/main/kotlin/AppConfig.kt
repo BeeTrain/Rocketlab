@@ -10,7 +10,7 @@ object AppConfig {
     const val minSdkVersion = 26
     const val targetSdkVersion = 33
 
-    val javaVersion = JavaVersion.VERSION_11
+    val javaVersion = JavaVersion.VERSION_17
 }
 
 enum class BuildTypes(

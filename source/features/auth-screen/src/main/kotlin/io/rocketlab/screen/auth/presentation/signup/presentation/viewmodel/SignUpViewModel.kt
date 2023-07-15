@@ -34,8 +34,7 @@ class SignUpViewModel(
 
     val updatePasswordConfirmAction = action<String> { updatePasswordConfirm(it) }
     val validatePasswordConfirmAction = action<Unit> { validatePasswordConfirm() }
-    val updatePasswordConfirmVisibilityAction =
-        action<Unit> { onPasswordConfirmVisibilityChanged() }
+    val updatePasswordConfirmVisibilityAction = action<Unit> { onPasswordConfirmVisibilityChanged() }
 
     val registerClickedAction = action<Unit> { registerUser() }
 
@@ -48,124 +47,123 @@ class SignUpViewModel(
     }
 
     private fun updateEmail(newValue: String) {
-        uiState.value.asContentOrNull()?.let { content ->
-            uiState.update {
-                content.copy(
-                    eMail = content.eMail.copy(
-                        value = newValue,
-                        error = ""
-                    )
+        val content = uiState.value.asContentOrNull() ?: return
+
+        uiState.update {
+            content.copy(
+                eMail = content.eMail.copy(
+                    value = newValue,
+                    error = ""
                 )
-            }
+            )
         }
     }
 
     private fun validateEmail() {
-        uiState.value.asContentOrNull()?.let { content ->
-            uiState.update {
-                content.copy(
-                    eMail = content.eMail.copy(
-                        error = signingValidator.getEmailErrorOrEmpty(content.eMail)
-                    )
+        val content = uiState.value.asContentOrNull() ?: return
+
+        uiState.update {
+            content.copy(
+                eMail = content.eMail.copy(
+                    error = signingValidator.getEmailErrorOrEmpty(content.eMail)
                 )
-            }
+            )
         }
     }
 
     private fun updatePassword(newValue: String) {
-        uiState.value.asContentOrNull()?.let { content ->
-            uiState.update {
-                content.copy(
-                    password = content.password.copy(
-                        value = newValue,
-                        error = ""
-                    )
+        val content = uiState.value.asContentOrNull() ?: return
+
+        uiState.update {
+            content.copy(
+                password = content.password.copy(
+                    value = newValue,
+                    error = ""
                 )
-            }
+            )
         }
     }
 
     private fun validatePassword() {
-        uiState.value.asContentOrNull()?.let { content ->
-            uiState.update {
-                content.copy(
-                    password = content.password.copy(
-                        error = signingValidator.getPasswordErrorOrEmpty(content.password)
-                    )
+        val content = uiState.value.asContentOrNull() ?: return
+
+        uiState.update {
+            content.copy(
+                password = content.password.copy(
+                    error = signingValidator.getPasswordErrorOrEmpty(content.password)
                 )
-            }
+            )
         }
     }
 
     private fun onPasswordVisibilityChanged() {
-        uiState.value.asContentOrNull()?.let { content ->
-            val isPasswordVisible = content.password.isVisible
-            uiState.update {
-                content.copy(
-                    password = content.password.copy(
-                        isVisible = isPasswordVisible.not()
-                    )
+        val content = uiState.value.asContentOrNull() ?: return
+
+        uiState.update {
+            content.copy(
+                password = content.password.copy(
+                    isVisible = content.password.isVisible.not()
                 )
-            }
+            )
         }
     }
 
     private fun updatePasswordConfirm(newValue: String) {
-        uiState.value.asContentOrNull()?.let { content ->
-            uiState.update {
-                content.copy(
-                    passwordConfirm = content.passwordConfirm.copy(
-                        value = newValue,
-                        error = ""
-                    )
+        val content = uiState.value.asContentOrNull() ?: return
+
+        uiState.update {
+            content.copy(
+                passwordConfirm = content.passwordConfirm.copy(
+                    value = newValue,
+                    error = ""
                 )
-            }
-            if (content.password.value.length == newValue.length) {
-                validatePasswordConfirm()
-            }
+            )
+        }
+        if (content.password.value.length == newValue.length) {
+            validatePasswordConfirm()
         }
     }
 
     private fun validatePasswordConfirm() {
-        uiState.value.asContentOrNull()?.let { content ->
-            uiState.update {
-                content.copy(
-                    passwordConfirm = content.passwordConfirm.copy(
-                        error = signingValidator.getPasswordConfirmErrorOrEmpty(
-                            passwordField = content.password,
-                            confirmField = content.passwordConfirm
-                        )
+        val content = uiState.value.asContentOrNull() ?: return
+
+        uiState.update {
+            content.copy(
+                passwordConfirm = content.passwordConfirm.copy(
+                    error = signingValidator.getPasswordConfirmErrorOrEmpty(
+                        passwordField = content.password,
+                        confirmField = content.passwordConfirm
                     )
                 )
-            }
+            )
         }
     }
 
     private fun onPasswordConfirmVisibilityChanged() {
-        uiState.value.asContentOrNull()?.let { content ->
-            val isPasswordVisible = content.passwordConfirm.isVisible
-            uiState.update {
-                content.copy(
-                    passwordConfirm = content.passwordConfirm.copy(
-                        isVisible = isPasswordVisible.not()
-                    )
+        val content = uiState.value.asContentOrNull() ?: return
+
+        uiState.update {
+            content.copy(
+                passwordConfirm = content.passwordConfirm.copy(
+                    isVisible = content.passwordConfirm.isVisible.not()
                 )
-            }
+            )
         }
     }
 
     private fun registerUser() {
+        val content = uiState.value.asContentOrNull() ?: return
+
         validateEmail()
         validatePassword()
         validatePasswordConfirm()
 
-        val contentState = uiState.value.asContentOrNull() ?: return
-        if (contentState.isFieldsValid) {
+        if (content.isFieldsValid) {
             uiState.update { SignUpScreenState.Loading }
             authService.registerUser(
-                credentials = contentState.credentials,
+                credentials = content.credentials,
                 onSuccess = { openHomeScreen() },
-                onFailure = { exception -> handleError(exception, contentState) }
+                onFailure = { exception -> handleError(exception, content) }
             )
         }
     }

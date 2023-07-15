@@ -1,5 +1,6 @@
 package io.rocketlab.screen.note.list.presentation.view.note
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,6 +28,7 @@ import io.rocketlab.ui.draganddrop.DragTarget
 import io.rocketlab.ui.draganddrop.DropTarget
 import io.rocketlab.ui.theme.Typography
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NotesColumn(
     modifier: Modifier = Modifier,
@@ -52,14 +54,14 @@ fun NotesColumn(
                 .fillMaxSize()
                 .background(notesColumnColor(isInBound))
         ) {
-            item {
+            stickyHeader {
                 Text(
                     text = title,
                     color = MaterialTheme.colorScheme.onBackground,
                     style = Typography.headlineMedium,
                     textAlign = TextAlign.Start,
                     modifier = Modifier
-                        .padding(8.dp)
+                        .background(MaterialTheme.colorScheme.background)
                         .fillMaxWidth()
                 )
             }
