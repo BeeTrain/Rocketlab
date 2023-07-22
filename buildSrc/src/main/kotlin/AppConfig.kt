@@ -6,9 +6,9 @@ private const val DEBUG_KEYSTORE_FILE_PATH = "config/signing/key/rocketlab-debug
 object AppConfig {
     const val applicationId = "io.rocketlab"
 
-    const val compileSdkVersion = 33
+    const val compileSdkVersion = 34
     const val minSdkVersion = 26
-    const val targetSdkVersion = 33
+    const val targetSdkVersion = 34
 
     val javaVersion = JavaVersion.VERSION_17
 }
