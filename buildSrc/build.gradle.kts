@@ -2,10 +2,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val javaVersion = JavaVersion.VERSION_17
 val kotlinVersion = "1.9.0"
-val buildGradlePluginVersion = "8.0.2"
+val buildGradlePluginVersion = "8.1.0"
 val googleServicesVersion = "4.3.15"
-val appDistributionVersion = "3.2.0"
-val crashlyticsPlugin = "2.9.2"
+val appDistributionVersion = "4.0.0"
+val crashlyticsPlugin = "2.9.7"
 
 plugins {
     `kotlin-dsl`

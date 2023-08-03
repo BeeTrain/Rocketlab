@@ -28,7 +28,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import io.rocketlab.screen.note.list.presentation.model.NoteModel
-import io.rocketlab.ui.extension.bounceClick
 import io.rocketlab.ui.shape.WavedShape
 
 @Composable
@@ -132,8 +131,8 @@ fun NoteMenu(
     ) {
         Icon(
             modifier = Modifier
-                .size(20.dp)
-                .bounceClick { onEdit.invoke(note) },
+                .size(24.dp)
+                .clickable { onEdit.invoke(note) },
             imageVector = Icons.Filled.Edit,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onBackground
@@ -141,8 +140,8 @@ fun NoteMenu(
         Spacer(modifier = Modifier.width(4.dp))
         Icon(
             modifier = Modifier
-                .size(20.dp)
-                .bounceClick { onDelete.invoke(note) },
+                .size(24.dp)
+                .clickable { onDelete.invoke(note) },
             imageVector = Icons.Filled.Delete,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onBackground

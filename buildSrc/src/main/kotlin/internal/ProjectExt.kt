@@ -20,8 +20,8 @@ internal val Project.applicationExtension: ApplicationExtension
 internal val Project.libraryExtension: LibraryExtension
     get() = extensions.findByName(ANDROID_EXTENSION_NAME) as LibraryExtension
 
-internal val Project.androidExtension: CommonExtension<*, *, *, *>
-    get() = extensions.findByName(ANDROID_EXTENSION_NAME) as CommonExtension<*, *, *, *>
+internal val Project.androidExtension: CommonExtension<*, *, *, *, *>
+    get() = extensions.findByName(ANDROID_EXTENSION_NAME) as CommonExtension<*, *, *, *, *>
 
 internal fun Project.configureProjectModules() {
     val projectName = name
