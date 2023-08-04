@@ -5,22 +5,22 @@ sealed class Destination {
     val route: String
         get() = this::class.java.simpleName
 
-    object Splash : Destination()
+    data object Splash : Destination()
 
-    object SignIn : Destination()
+    data object SignIn : Destination()
 
-    object SignUp : Destination()
+    data object SignUp : Destination()
 
-    object Home : Destination()
+    data object Home : Destination()
 
-    object Profile : Destination()
+    data object Profile : Destination()
 
-    object NotesList : Destination()
+    data object NotesList : Destination()
 
-    object NoteEditor : Destination() {
+    data object NoteEditor : Destination() {
 
         const val KEY_NOTE_ID = "NOTE_ID"
     }
 
-    object HeroSquad : Destination()
+    data object HeroSquad : Destination()
 }

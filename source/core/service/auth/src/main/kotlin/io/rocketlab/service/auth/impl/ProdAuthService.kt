@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import io.rocketlab.service.auth.AuthService
 import io.rocketlab.service.auth.exception.AuthServerTimeoutException
+import io.rocketlab.service.auth.mapper.UserMapper
 import io.rocketlab.service.auth.model.Credentials
 import io.rocketlab.service.auth.model.User
 import io.rocketlab.utils.extension.catchError
@@ -22,20 +23,15 @@ private const val DEFAULT_TIMEOUT = 30L
 
 class ProdAuthService(
     private val firebaseAuth: FirebaseAuth,
-    private val googleSignInClient: GoogleSignInClient
+    private val googleSignInClient: GoogleSignInClient,
+    private val userMapper: UserMapper
 ) : AuthService {
 
     private val firebaseUser: FirebaseUser?
         get() = firebaseAuth.currentUser
 
-    override val user: User?
-        get() = firebaseUser?.let {
-            User(
-                name = it.displayName.orEmpty(),
-                eMail = it.email.orEmpty(),
-                photoUrl = it.photoUrl?.toString()
-            )
-        }
+    override val user: User
+        get() = userMapper.map(firebaseUser)
 
     override val isLogged: Boolean
         get() = firebaseUser != null
@@ -77,6 +73,10 @@ class ProdAuthService(
             signInWithEmailAndPassword(credentials, onSuccess, onFailure),
             onFailure
         )
+    }
+
+    override fun signOut() {
+        firebaseAuth.signOut()
     }
 
     private fun signInWithEmailAndPassword(

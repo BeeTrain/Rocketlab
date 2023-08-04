@@ -2,5 +2,6 @@
 <resources>
 
     <string name="profile_screen_title">Profile</string>
+    <string name="profile_log_out_title">Log out</string>
 
 </resources>

@@ -6,7 +6,7 @@ import androidx.compose.runtime.Immutable
 sealed interface NotesListScreenState {
 
     @Immutable
-    object Loading : NotesListScreenState
+    data object Loading : NotesListScreenState
 
     @Immutable
     data class Content(

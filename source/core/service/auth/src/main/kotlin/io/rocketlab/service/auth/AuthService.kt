@@ -8,6 +8,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import io.rocketlab.service.auth.impl.DebugAuthService
 import io.rocketlab.service.auth.impl.ProdAuthService
+import io.rocketlab.service.auth.mapper.UserMapper
 import io.rocketlab.service.auth.model.Credentials
 import io.rocketlab.service.auth.model.User
 import io.rocketlab.utils.system.config.Environment
@@ -19,9 +20,10 @@ interface AuthService {
         fun provide(
             firebaseAuth: FirebaseAuth,
             googleSignInClient: GoogleSignInClient,
+            userMapper: UserMapper,
             environment: Environment
         ): AuthService {
-            val prodAuthService = ProdAuthService(firebaseAuth, googleSignInClient)
+            val prodAuthService = ProdAuthService(firebaseAuth, googleSignInClient, userMapper)
 
             return if (environment.isDebug) {
                 DebugAuthService(prodAuthService)
@@ -31,7 +33,7 @@ interface AuthService {
         }
     }
 
-    val user: User?
+    val user: User
 
     val isLogged: Boolean
 
@@ -54,4 +56,6 @@ interface AuthService {
         onSuccess: ((Task<AuthResult>) -> Unit),
         onFailure: ((Exception) -> Unit) = {}
     )
+
+    fun signOut()
 }

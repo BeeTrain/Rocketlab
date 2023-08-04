@@ -5,6 +5,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import io.rocketlab.annotation.processing.annotation.KoinModule
 import io.rocketlab.service.auth.AuthService
+import io.rocketlab.service.auth.mapper.UserMapper
 import io.rocketlab.service.auth.model.WebClientId
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -12,7 +13,7 @@ import org.koin.dsl.module
 @KoinModule
 val authServiceModule = module {
 
-    single { AuthService.Provider.provide(get(), get(), get()) }
+    single { AuthService.Provider.provide(get(), get(), get(), get()) }
 
     single { FirebaseAuth.getInstance() }
 
@@ -24,4 +25,6 @@ val authServiceModule = module {
     }
 
     single { GoogleSignIn.getClient(androidContext(), get()) }
+
+    factory { UserMapper() }
 }
