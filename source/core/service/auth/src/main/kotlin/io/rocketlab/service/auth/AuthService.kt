@@ -3,10 +3,8 @@ package io.rocketlab.service.auth
 import android.content.Intent
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import io.rocketlab.service.auth.impl.DebugAuthService
 import io.rocketlab.service.auth.impl.ProdAuthService
 import io.rocketlab.service.auth.mapper.UserMapper
 import io.rocketlab.service.auth.model.Credentials
@@ -20,16 +18,9 @@ interface AuthService {
         fun provide(
             firebaseAuth: FirebaseAuth,
             googleSignInClient: GoogleSignInClient,
-            userMapper: UserMapper,
-            environment: Environment
+            userMapper: UserMapper
         ): AuthService {
-            val prodAuthService = ProdAuthService(firebaseAuth, googleSignInClient, userMapper)
-
-            return if (environment.isDebug) {
-                DebugAuthService(prodAuthService)
-            } else {
-                prodAuthService
-            }
+            return ProdAuthService(firebaseAuth, googleSignInClient, userMapper)
         }
     }
 
@@ -41,19 +32,19 @@ interface AuthService {
 
     fun registerUser(
         credentials: Credentials,
-        onSuccess: (Task<AuthResult>) -> Unit,
+        onSuccess: (AuthResult) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
     fun signInWithGoogleSign(
         account: GoogleSignInAccount,
-        onSuccess: (Task<AuthResult>) -> Unit,
+        onSuccess: (AuthResult) -> Unit,
         onFailure: (Exception) -> Unit
     )
 
     fun signInWithCredentials(
         credentials: Credentials,
-        onSuccess: ((Task<AuthResult>) -> Unit),
+        onSuccess: ((AuthResult) -> Unit),
         onFailure: ((Exception) -> Unit) = {}
     )
 

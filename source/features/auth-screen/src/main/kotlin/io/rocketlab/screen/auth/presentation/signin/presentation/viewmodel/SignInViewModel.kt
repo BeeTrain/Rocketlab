@@ -13,7 +13,10 @@ import io.rocketlab.screen.auth.presentation.signin.presentation.model.SignInErr
 import io.rocketlab.screen.auth.presentation.signin.presentation.model.SignInScreenState
 import io.rocketlab.screen.auth.presentation.validation.SigningValidator
 import io.rocketlab.service.auth.AuthService
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.update
+
+private const val ERROR_STATE_DURATION = 5000L
 
 class SignInViewModel(
     private val authService: AuthService,
@@ -42,7 +45,10 @@ class SignInViewModel(
     val onGoogleAccountReceivedAction = action(::authWithGoogle)
 
     private fun onErrorShowed() {
-        errorState.update { SignInErrorState() }
+        launchJob {
+            delay(ERROR_STATE_DURATION)
+            errorState.update { SignInErrorState() }
+        }
     }
 
     private fun updateEmail(newValue: String) {

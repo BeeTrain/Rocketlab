@@ -18,14 +18,15 @@ class ProfileViewModel(
 
     val onBackPressedAction = action<Unit> { navigator.navigateUp() }
     val onLogOutPressedAction = action<Unit> { logOut() }
-    val onProfileImagePressedAction = action<Unit> {  }
-    val onUserNamePressedAction = action<Unit> {  }
+    val onProfileImagePressedAction = action<Unit> { }
+    val onUserNamePressedAction = action<Unit> { }
 
     init {
         launchJob {
             val user = authService.user
             uiState.update {
                 ProfileScreenState.Content(
+                    isLogged = authService.isLogged,
                     userName = user.name,
                     eMail = user.eMail,
                     photoUrl = user.photoUrl.orEmpty()

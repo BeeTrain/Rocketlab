@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="auth_anonymous_user_name">Anonymous</string>
+
+</resources>

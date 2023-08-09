@@ -20,6 +20,7 @@
     <string name="sign_via_google_button_title">via Google</string>
 
     <string name="auth_error_user_not_found_message">User not found</string>
+    <string name="auth_error_wrong_password_message">The password is invalid or the user does not have a password.</string>
     <string name="auth_error_time_out_message">Server not responding</string>
     <string name="auth_error_unknown_message">Something went wrong</string>
 

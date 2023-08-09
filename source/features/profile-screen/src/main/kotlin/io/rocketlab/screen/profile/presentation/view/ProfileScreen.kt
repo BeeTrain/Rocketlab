@@ -52,16 +52,9 @@ fun ProfileScreen(
                 title = stringResource(id = R.string.profile_screen_title),
                 onBackPressed = { viewModel.onBackPressedAction.accept() },
                 actions = {
-                    OutlinedButton(
-                        modifier = Modifier.height(28.dp),
-                        onClick = { viewModel.onLogOutPressedAction.accept() },
-                        content = {
-                            Text(
-                                fontSize = 10.sp,
-                                color = MaterialTheme.colorScheme.outline,
-                                text = stringResource(id = R.string.profile_log_out_title)
-                            )
-                        }
+                    ProfileActions(
+                        uiState = uiState,
+                        viewModel = viewModel
                     )
                 }
             )
@@ -83,6 +76,28 @@ fun ProfileScreen(
             }
         }
     )
+}
+
+@Composable
+fun ProfileActions(
+    uiState: ProfileScreenState,
+    viewModel: ProfileViewModel
+) {
+    if (uiState is ProfileScreenState.Content && uiState.isLogged) {
+        OutlinedButton(
+            modifier = Modifier.height(28.dp),
+            onClick = { viewModel.onLogOutPressedAction.accept() },
+            content = {
+                Text(
+                    fontSize = 10.sp,
+                    color = MaterialTheme.colorScheme.outline,
+                    text = stringResource(id = R.string.profile_log_out_title)
+                )
+            }
+        )
+    } else {
+        Spacer(modifier = Modifier.size(0.dp))
+    }
 }
 
 @Composable
@@ -116,6 +131,7 @@ private fun BoxScope.ContentState(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             modifier = Modifier
+                .padding(horizontal = 4.dp)
                 .align(Alignment.CenterHorizontally)
                 .clickable { viewModel.onUserNamePressedAction.accept() },
             color = MaterialTheme.colorScheme.onBackground,
@@ -123,7 +139,9 @@ private fun BoxScope.ContentState(
             text = uiState.userName
         )
         Text(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .align(Alignment.CenterHorizontally),
             color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.bodyMedium,
             text = uiState.eMail

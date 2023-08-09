@@ -1,16 +1,20 @@
 package io.rocketlab.service.auth.impl
 
 import android.content.Intent
+import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import io.rocketlab.service.auth.AuthService
 import io.rocketlab.service.auth.exception.AuthServerTimeoutException
+import io.rocketlab.service.auth.exception.InvalidCredentialsException
+import io.rocketlab.service.auth.exception.UserNotFoundException
 import io.rocketlab.service.auth.mapper.UserMapper
 import io.rocketlab.service.auth.model.Credentials
 import io.rocketlab.service.auth.model.User
@@ -42,7 +46,7 @@ class ProdAuthService(
 
     override fun registerUser(
         credentials: Credentials,
-        onSuccess: (Task<AuthResult>) -> Unit,
+        onSuccess: (AuthResult) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         catchError(
@@ -53,7 +57,7 @@ class ProdAuthService(
 
     override fun signInWithGoogleSign(
         account: GoogleSignInAccount,
-        onSuccess: (Task<AuthResult>) -> Unit,
+        onSuccess: (AuthResult) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
@@ -66,7 +70,7 @@ class ProdAuthService(
 
     override fun signInWithCredentials(
         credentials: Credentials,
-        onSuccess: ((Task<AuthResult>) -> Unit),
+        onSuccess: ((AuthResult) -> Unit),
         onFailure: ((Exception) -> Unit)
     ) {
         catchError(
@@ -81,58 +85,107 @@ class ProdAuthService(
 
     private fun signInWithEmailAndPassword(
         credentials: Credentials,
-        onSuccess: (Task<AuthResult>) -> Unit,
+        onSuccess: (AuthResult) -> Unit,
         onFailure: (Exception) -> Unit
     ): () -> Unit {
         return {
             var isActive = true
 
             firebaseAuth.signInWithEmailAndPassword(credentials.email, credentials.password)
-                .addOnCompleteListener { if (isActive) onSuccess.invoke(it) }
-                .addOnFailureListener { if (isActive) onFailure.invoke(it) }
+                .addOnSuccessListener {
+                    Log.e("asd", "OnSuccess")
+                    Log.e("asd", "isActive=$isActive")
+                    if (isActive) {
+                        Log.e("asd", "user=${it.user}")
+                        onSuccess.invoke(it)
+                        isActive = false
+                    }
+                }
+                .addOnFailureListener {
+                    Log.e("asd", "OnFailure")
+                    Log.e("asd", "exception=$it")
+                    if (isActive) {
+                        onFailure.invoke(mapError(it))
+                        isActive = false
+                    }
+                }
 
             Timer().schedule(TimeUnit.SECONDS.toMillis(DEFAULT_TIMEOUT)) {
-                isActive = false
-                onFailure.invoke(AuthServerTimeoutException())
+                if (isActive) {
+                    onFailure.invoke(AuthServerTimeoutException())
+                    isActive = false
+                }
             }
         }
     }
 
     private fun createUserWithEmailAndPassword(
         credentials: Credentials,
-        onSuccess: (Task<AuthResult>) -> Unit,
+        onSuccess: (AuthResult) -> Unit,
         onFailure: (Exception) -> Unit
     ): () -> Unit {
         return {
             var isActive = true
 
             firebaseAuth.createUserWithEmailAndPassword(credentials.email, credentials.password)
-                .addOnCompleteListener { if (isActive) onSuccess.invoke(it) }
-                .addOnFailureListener { if (isActive) onFailure.invoke(it) }
+                .addOnSuccessListener {
+                    if (isActive) {
+                        onSuccess.invoke(it)
+                        isActive = false
+                    }
+                }
+                .addOnFailureListener {
+                    if (isActive) {
+                        onFailure.invoke(mapError(it))
+                        isActive = false
+                    }
+                }
 
             Timer().schedule(TimeUnit.SECONDS.toMillis(DEFAULT_TIMEOUT)) {
-                isActive = false
-                onFailure.invoke(AuthServerTimeoutException())
+                if (isActive) {
+                    onFailure.invoke(AuthServerTimeoutException())
+                    isActive = false
+                }
             }
         }
     }
 
     private fun signInWithGoogleCredentials(
         credential: AuthCredential,
-        onSuccess: (Task<AuthResult>) -> Unit,
+        onSuccess: (AuthResult) -> Unit,
         onFailure: (Exception) -> Unit
     ): () -> Unit {
         return {
             var isActive = true
 
             firebaseAuth.signInWithCredential(credential)
-                .addOnCompleteListener { if (isActive) onSuccess.invoke(it) }
-                .addOnFailureListener { if (isActive) onFailure.invoke(it) }
+                .addOnSuccessListener {
+                    if (isActive) {
+                        onSuccess.invoke(it)
+                        isActive = false
+                    }
+                }
+                .addOnFailureListener {
+                    if (isActive) {
+                        onFailure.invoke(mapError(it))
+                        isActive = false
+                    }
+                }
 
             Timer().schedule(TimeUnit.SECONDS.toMillis(DEFAULT_TIMEOUT)) {
-                isActive = false
-                onFailure.invoke(AuthServerTimeoutException())
+                if (isActive) {
+                    onFailure.invoke(AuthServerTimeoutException())
+                    isActive = false
+                }
             }
+        }
+    }
+
+    private fun mapError(exception: Exception): Exception {
+        return when (exception) {
+            is FirebaseAuthInvalidCredentialsException -> InvalidCredentialsException(exception)
+            is FirebaseAuthInvalidUserException -> UserNotFoundException(exception)
+            else -> exception
         }
     }
 }

@@ -13,7 +13,7 @@ import org.koin.dsl.module
 @KoinModule
 val authServiceModule = module {
 
-    single { AuthService.Provider.provide(get(), get(), get(), get()) }
+    single { AuthService.Provider.provide(get(), get(), get()) }
 
     single { FirebaseAuth.getInstance() }
 
@@ -26,5 +26,5 @@ val authServiceModule = module {
 
     single { GoogleSignIn.getClient(androidContext(), get()) }
 
-    factory { UserMapper() }
+    factory { UserMapper(get()) }
 }

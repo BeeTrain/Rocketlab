@@ -9,6 +9,7 @@ sealed interface ProfileScreenState {
 
     @Immutable
     data class Content(
+        val isLogged: Boolean,
         val userName: String,
         val eMail: String,
         val photoUrl: String,
