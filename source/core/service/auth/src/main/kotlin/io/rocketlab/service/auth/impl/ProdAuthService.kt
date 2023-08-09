@@ -1,7 +1,6 @@
 package io.rocketlab.service.auth.impl
 
 import android.content.Intent
-import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthCredential
@@ -93,17 +92,12 @@ class ProdAuthService(
 
             firebaseAuth.signInWithEmailAndPassword(credentials.email, credentials.password)
                 .addOnSuccessListener {
-                    Log.e("asd", "OnSuccess")
-                    Log.e("asd", "isActive=$isActive")
                     if (isActive) {
-                        Log.e("asd", "user=${it.user}")
                         onSuccess.invoke(it)
                         isActive = false
                     }
                 }
                 .addOnFailureListener {
-                    Log.e("asd", "OnFailure")
-                    Log.e("asd", "exception=$it")
                     if (isActive) {
                         onFailure.invoke(mapError(it))
                         isActive = false
