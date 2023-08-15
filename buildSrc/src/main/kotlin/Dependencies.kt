@@ -61,10 +61,10 @@ object ComposeDependencies {
 
     object Versions {
 
-        const val compiler = "1.5.0"
-        const val functionality = "1.3.1"
-        const val material3 = "1.0.1"
-        const val accompanist = "0.28.0"
+        const val compiler = "1.5.1"
+        const val functionality = "1.5.0"
+        const val material3 = "1.1.1"
+        const val accompanist = "0.33.0-alpha"
     }
 
     const val ui = "androidx.compose.ui:ui:${Versions.functionality}"
