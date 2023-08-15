@@ -23,4 +23,6 @@ sealed class Destination {
     }
 
     data object HeroSquad : Destination()
+
+    data object Settings : Destination()
 }

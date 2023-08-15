@@ -20,6 +20,7 @@ class ProfileViewModel(
     val onLogOutPressedAction = action<Unit> { logOut() }
     val onProfileImagePressedAction = action<Unit> { }
     val onUserNamePressedAction = action<Unit> { }
+    val onSettingsPressedAction = action<Unit> { openSettings() }
 
     init {
         launchJob {
@@ -42,5 +43,9 @@ class ProfileViewModel(
                 inclusive = true
             }
         }
+    }
+
+    private fun openSettings() {
+        navigator.navigate(Destination.Settings)
     }
 }
