@@ -10,5 +10,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.storage)
+
     coil()
 }

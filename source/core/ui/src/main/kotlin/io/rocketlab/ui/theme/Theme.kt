@@ -84,7 +84,6 @@ fun RocketlabTheme(
         .ifNull(LightColors)
         .also { colorScheme -> setSystemBarsColor(colorScheme, useDarkTheme) }
 
-
     MaterialTheme(
         colorScheme = colors,
         shapes = Shapes,
